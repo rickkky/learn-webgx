@@ -1,1 +1,1 @@
-# webgl-sandbox
+# Learn WebGL
