@@ -35,7 +35,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 // It implicitly binds the current `ARRAY_BUFFER` to the attribute.
 gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 // Vertex data.
-const positions = [0, 0, 0, 0.5, 0.7, 0];
+const positions = [0, 0, 0, 0.5, 1, 0];
 // Put the data in the buffer.
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
