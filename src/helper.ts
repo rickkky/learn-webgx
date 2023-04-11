@@ -20,8 +20,11 @@ export function compileShader(
   gl.compileShader(shader);
   const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
   if (!success) {
+    const error = new Error(
+      `Could not compile shader: \n\n${gl.getShaderInfoLog(shader)}`,
+    );
     gl.deleteShader(shader);
-    throw new Error(`Could not compile shader: ${gl.getShaderInfoLog(shader)}`);
+    throw error;
   }
   return shader;
 }
@@ -43,8 +46,11 @@ export function createProgram(
   gl.linkProgram(program);
   const success = gl.getProgramParameter(program, gl.LINK_STATUS);
   if (!success) {
+    const error = new Error(
+      `Could create program: \n\n${gl.getProgramInfoLog(program)}`,
+    );
     gl.deleteProgram(program);
-    throw new Error(`Could create program: ${gl.getProgramInfoLog(program)}`);
+    throw error;
   }
   return program;
 }
