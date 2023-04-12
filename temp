@@ -1,0 +1,138 @@
+// main
+import '../../../src/style.css';
+import { resizeCanavsToDisplaySize, createProgram } from '../../../src/helper';
+import vertexShaderSource from './vertex.glsl';
+import fragmentShaderSource from './fragment.glsl';
+
+const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+const gl = canvas.getContext('webgl2')!;
+
+resizeCanavsToDisplaySize(gl.canvas as HTMLCanvasElement);
+gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+gl.clearColor(0, 0, 0, 0);
+gl.clear(gl.COLOR_BUFFER_BIT);
+
+const program = createProgram(gl, vertexShaderSource, fragmentShaderSource);
+gl.useProgram(program);
+
+// const vao = gl.createVertexArray();
+// gl.bindVertexArray(vao);
+
+const positionLocation = gl.getAttribLocation(program, 'a_position');
+gl.enableVertexAttribArray(positionLocation);
+const positionBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+const positions = [
+  -0.6, 0.6, 0.6, 0.6, -0.6, -0.6, -0.6, -0.6, 0.6, 0.6, 0.6, -0.6,
+];
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+const colorLocation = gl.getAttribLocation(program, 'a_color');
+gl.enableVertexAttribArray(colorLocation);
+const colorBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+const randomColor = () => [
+  Math.random() * 256,
+  Math.random() * 256,
+  Math.random() * 256,
+  255,
+];
+const colors = [
+  ...randomColor(),
+  ...randomColor(),
+  ...randomColor(),
+  ...randomColor(),
+  ...randomColor(),
+  ...randomColor(),
+];
+gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(colors), gl.STATIC_DRAW);
+gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
+
+gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+// --
+
+#version 300 es
+
+in vec4 a_position;
+in vec4 a_color;
+
+out vec4 v_color;
+
+void main() {
+  gl_Position = a_position;
+
+  v_color = a_color;
+}
+
+// --
+
+#version 300 es
+
+precision highp float;
+
+in vec4 v_color;
+
+out vec4 outColor;
+
+void main() {
+  outColor = v_color;
+}
+
+// -- home.ts
+
+const btn = document.createElement('a');
+btn.href = '/';
+btn.innerText = 'Home';
+btn.id = 'home';
+document.body.appendChild(btn);
+
+export {};
+
+// --
+
+html,
+body,
+#app {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #f0f0f0;
+}
+#canvas {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 60vmin;
+  height: 60vmin;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 6px 1px rgba(0, 0, 0, 0.1);
+}
+#home {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: block;
+  height: 36px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 36px;
+  text-align: center;
+  font-weight: bold;
+  color: #404040;
+  text-decoration: none;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 6px 1px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+#home:hover {
+  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.1);
+}
