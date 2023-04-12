@@ -7,10 +7,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        'random-rectangle': resolve(
-          __dirname,
-          'demo/random-rectangle/index.html',
-        ),
       },
     },
   },

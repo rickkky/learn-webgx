@@ -1,5 +1,8 @@
-import '../../../src/style.css';
-import { resizeCanavsToDisplaySize, createProgram } from '../../../src/helper';
+import '../../../common/style.css';
+import {
+  resizeCanavsToDisplaySize,
+  createProgram,
+} from '../../../common/helper';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
 

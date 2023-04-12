@@ -1,4 +1,5 @@
 {
+  "include": ["common", "demo", "env.d.ts"],
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
@@ -14,6 +15,5 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "skipLibCheck": true
-  },
-  "include": ["src", "demo", "env.d.ts"]
+  }
 }
