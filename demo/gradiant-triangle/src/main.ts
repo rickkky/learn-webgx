@@ -1,4 +1,3 @@
-import '/common/style.css';
 import { resizeCanavsToDisplaySize, createProgram } from '@/common/helper';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
@@ -15,8 +14,8 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 const program = createProgram(gl, vertexShaderSource, fragmentShaderSource);
 gl.useProgram(program);
 
-// const vao = gl.createVertexArray();
-// gl.bindVertexArray(vao);
+const vao = gl.createVertexArray();
+gl.bindVertexArray(vao);
 
 const positionLocation = gl.getAttribLocation(program, 'a_position');
 gl.enableVertexAttribArray(positionLocation);
