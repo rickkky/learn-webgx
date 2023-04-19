@@ -1,4 +1,4 @@
-import { resizeCanavsToDisplaySize, createProgram } from '@/common/helper';
+import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
 import imageSource from './leaves.jpg';
@@ -24,19 +24,14 @@ const positionLocation = gl.getAttribLocation(program, 'a_position');
 gl.enableVertexAttribArray(positionLocation);
 const positionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+// prettier-ignore
 const positions = [
-  0,
-  0,
-  0,
-  image.height,
-  image.width,
-  0,
-  image.width,
-  0,
-  0,
-  image.height,
-  image.width,
-  image.height,
+  0,           0,
+  image.width, 0,
+  0,           image.height,
+  0,           image.height,
+  image.width, 0,
+  image.width, image.height,
 ];
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
@@ -45,7 +40,15 @@ const texCoordLocation = gl.getAttribLocation(program, 'a_texCoord');
 gl.enableVertexAttribArray(texCoordLocation);
 const texCoordBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
-const texCoords = [0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1];
+// prettier-ignore
+const texCoords = [
+  0, 0,
+  1, 0,
+  0, 1,
+  0, 1,
+  1, 0,
+  1, 1,
+];
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoords), gl.STATIC_DRAW);
 gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 
@@ -56,8 +59,6 @@ const imageLocation = gl.getUniformLocation(program, 'u_image');
 gl.uniform1i(imageLocation, 0);
 
 const originalTexture = createAndSetupTexture();
-gl.activeTexture(gl.TEXTURE0);
-gl.bindTexture(gl.TEXTURE_2D, originalTexture);
 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 
 const textures: WebGLTexture[] = [];
@@ -91,11 +92,108 @@ for (let i = 0; i < 2; i++) {
   );
 }
 
+// prettier-ignore
 const kernels: Record<string, number[]> = {
-  normal: [0, 0, 0, 0, 1, 0, 0, 0, 0],
-  gaussianBlur: [0.045, 0.122, 0.045, 0.122, 0.332, 0.122, 0.045, 0.122, 0.045],
-  unsharpen: [-1, -1, -1, -1, 9, -1, -1, -1, -1],
-  emboss: [-2, -1, 0, -1, 1, 1, 0, 1, 2],
+  normal: [
+    0, 0, 0,
+    0, 1, 0,
+    0, 0, 0,
+  ],
+  gaussianBlur: [
+    0.045, 0.122, 0.045,
+    0.122, 0.332, 0.122,
+    0.045, 0.122, 0.045,
+  ],
+  gaussianBlur2: [
+    1, 2, 1,
+    2, 4, 2,
+    1, 2, 1,
+  ],
+  gaussianBlur3: [
+    0, 1, 0,
+    1, 1, 1,
+    0, 1, 0,
+  ],
+  unsharpen: [
+    -1, -1, -1,
+    -1,  9, -1,
+    -1, -1, -1,
+  ],
+  sharpness: [
+     0, -1,  0,
+    -1,  5, -1,
+     0, -1,  0,
+  ],
+  sharpen: [
+    -1, -1,  -1,
+    -1,  16, -1,
+    -1, -1,  -1,
+  ],
+  edgeDetect: [
+    -0.125, -0.125, -0.125,
+    -0.125,  1,     -0.125,
+    -0.125, -0.125, -0.125,
+  ],
+  edgeDetect2: [
+    -1, -1, -1,
+    -1,  8, -1,
+    -1, -1, -1,
+  ],
+  edgeDetect3: [
+    -5, 0, 0,
+     0, 0, 0,
+     0, 0, 5,
+  ],
+  edgeDetect4: [
+    -1, -1, -1,
+     0,  0,  0,
+     1,  1,  1,
+  ],
+  edgeDetect5: [
+    -1, -1, -1,
+     2,  2,  2,
+    -1, -1, -1,
+  ],
+  edgeDetect6: [
+    -5, -5,  -5,
+    -5,  39, -5,
+    -5, -5,  -5,
+  ],
+  sobelHorizontal: [
+     1,  2,  1,
+     0,  0,  0,
+    -1, -2, -1,
+  ],
+  sobelVertical: [
+    1,  0, -1,
+    2,  0, -2,
+    1,  0, -1,
+  ],
+  previtHorizontal: [
+     1,  1,  1,
+     0,  0,  0,
+    -1, -1, -1,
+  ],
+  previtVertical: [
+    1,  0, -1,
+    1,  0, -1,
+    1,  0, -1,
+  ],
+  boxBlur: [
+    0.111, 0.111, 0.111,
+    0.111, 0.111, 0.111,
+    0.111, 0.111, 0.111,
+  ],
+  triangleBlur: [
+    0.0625, 0.125, 0.0625,
+    0.125,  0.25,  0.125,
+    0.0625, 0.125, 0.0625,
+  ],
+  emboss: [
+    -2, -1, 0,
+    -1,  1, 1,
+     0,  1, 2,
+  ],
 };
 
 const kernelLocation = gl.getUniformLocation(program, 'u_kernel[0]');
@@ -123,7 +221,14 @@ function createAndSetupTexture() {
 }
 
 function drawEffects() {
-  const effects: string[] = [];
+  gl.activeTexture(gl.TEXTURE0 + 0);
+  gl.bindTexture(gl.TEXTURE_2D, originalTexture);
+  const effects: string[] = [
+    'sharpen',
+    'emboss',
+    'gaussianBlur',
+    'triangleBlur',
+  ];
   let count = 0;
   for (let i = 0; i < effects.length; i++) {
     setFrameBuffer(framebuffers[count % 2], image.width, image.height);
