@@ -1,4 +1,4 @@
-import { resizeCanavsToDisplaySize, createProgram } from '@/common/helper';
+import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
 import imageSource from './leaves.jpg';
@@ -24,19 +24,14 @@ const positionLocation = gl.getAttribLocation(program, 'a_position');
 gl.enableVertexAttribArray(positionLocation);
 const positionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+// prettier-ignore
 const positions = [
-  0,
-  0,
-  0,
-  image.height,
-  image.width,
-  0,
-  image.width,
-  0,
-  0,
-  image.height,
-  image.width,
-  image.height,
+  0,           0,
+  image.width, 0,
+  0,           image.height,
+  0,           image.height,
+  image.width, 0,
+  image.width, image.height,
 ];
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
@@ -45,7 +40,15 @@ const texCoordLocation = gl.getAttribLocation(program, 'a_texCoord');
 gl.enableVertexAttribArray(texCoordLocation);
 const texCoordBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
-const texCoords = [0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1];
+// prettier-ignore
+const texCoords = [
+  0, 0,
+  1, 0,
+  0, 1,
+  0, 1,
+  1, 0,
+  1, 1,
+];
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoords), gl.STATIC_DRAW);
 gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 
@@ -56,7 +59,7 @@ const imageLocation = gl.getUniformLocation(program, 'u_image');
 gl.uniform1i(imageLocation, 0);
 
 const texture = gl.createTexture();
-gl.activeTexture(gl.TEXTURE0);
+gl.activeTexture(gl.TEXTURE0 + 0);
 gl.bindTexture(gl.TEXTURE_2D, texture);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -65,7 +68,12 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 
 const kernelLocation = gl.getUniformLocation(program, 'u_kernel[0]');
-const edgeDetectKernel = [-1, -1, -1, -1, 8, -1, -1, -1, -1];
+// prettier-ignore
+const edgeDetectKernel = [
+  -1, -1, -1,
+  -1,  8, -1,
+  -1, -1, -1
+];
 gl.uniform1fv(kernelLocation, edgeDetectKernel);
 
 const kernelWeightLocation = gl.getUniformLocation(program, 'u_kernelWeight');

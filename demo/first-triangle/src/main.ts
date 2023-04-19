@@ -1,4 +1,4 @@
-import { resizeCanavsToDisplaySize, createProgram } from '@/common/helper';
+import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
 
@@ -34,7 +34,12 @@ const positionBuffer = gl.createBuffer();
 // Bind it to `ARRAY_BUFFER` bind point.
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 // Vertex data.
-const positions = [0, 0, 0, 0.5, 1, 0];
+// prettier-ignore
+const positions = [
+  0, 0,
+  0, 0.5,
+  1, 0,
+];
 // Put the data in the buffer.
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 // Specify how to pull the data out of the buffer.

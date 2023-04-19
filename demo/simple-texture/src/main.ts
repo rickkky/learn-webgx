@@ -1,4 +1,4 @@
-import { resizeCanavsToDisplaySize, createProgram } from '@/common/helper';
+import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
 import imageSource from './leaves.jpg';
@@ -24,19 +24,14 @@ const positionLocation = gl.getAttribLocation(program, 'a_position');
 gl.enableVertexAttribArray(positionLocation);
 const positionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+// prettier-ignore
 const positions = [
-  0,
-  0,
-  0,
-  image.height,
-  image.width,
-  0,
-  image.width,
-  0,
-  0,
-  image.height,
-  image.width,
-  image.height,
+  0,           0,
+  image.width, 0,
+  0,           image.height,
+  0,           image.height,
+  image.width, 0,
+  image.width, image.height,
 ];
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
@@ -45,7 +40,15 @@ const texCoordLocation = gl.getAttribLocation(program, 'a_texCoord');
 gl.enableVertexAttribArray(texCoordLocation);
 const texCoordBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
-const texCoords = [0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1];
+// prettier-ignore
+const texCoords = [
+  0, 0,
+  1, 0,
+  0, 1,
+  0, 1,
+  1, 0,
+  1, 1,
+];
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoords), gl.STATIC_DRAW);
 gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 
@@ -59,7 +62,7 @@ gl.uniform1i(imageLocation, 0);
 // Create a texture.
 const texture = gl.createTexture();
 // Make unit-0 the active texture unit.
-gl.activeTexture(gl.TEXTURE0);
+gl.activeTexture(gl.TEXTURE0 + 0);
 // Bind it to texture unit-0's 2D bind point.
 gl.bindTexture(gl.TEXTURE_2D, texture);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);

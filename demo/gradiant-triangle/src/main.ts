@@ -1,4 +1,4 @@
-import { resizeCanavsToDisplaySize, createProgram } from '@/common/helper';
+import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
 
@@ -21,8 +21,14 @@ const positionLocation = gl.getAttribLocation(program, 'a_position');
 gl.enableVertexAttribArray(positionLocation);
 const positionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+// prettier-ignore
 const positions = [
-  -0.6, 0.6, 0.6, 0.6, -0.6, -0.6, -0.6, -0.6, 0.6, 0.6, 0.6, -0.6,
+  -0.6,  0.6,
+   0.6,  0.6,
+  -0.6, -0.6,
+  -0.6, -0.6,
+   0.6,  0.6,
+   0.6, -0.6,
 ];
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);

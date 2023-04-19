@@ -1,4 +1,4 @@
-import { resizeCanavsToDisplaySize, createProgram } from '@/common/helper';
+import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
 
@@ -32,11 +32,16 @@ for (let i = 0; i < 50; i++) {
   const y1 = Math.random() * gl.canvas.height;
   const positionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-  gl.bufferData(
-    gl.ARRAY_BUFFER,
-    new Float32Array([x0, y0, x0, y1, x1, y0, x0, y1, x1, y1, x1, y0]),
-    gl.STATIC_DRAW,
-  );
+  // prettier-ignore
+  const positions = [
+    x0, y0,
+    x1, y0,
+    x0, y1,
+    x0, y1,
+    x1, y0,
+    x1, y1,
+  ];
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
   gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
   gl.uniform4f(colorLocation, Math.random(), Math.random(), Math.random(), 1);
   gl.drawArrays(gl.TRIANGLES, 0, 6);
