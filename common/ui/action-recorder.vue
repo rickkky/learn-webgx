@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
-
 const props = defineProps<{
   actions: string[];
+  modelValue: string[];
 }>();
 
-const value = ref<string[]>([]);
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string[]): void;
+}>();
 </script>
 
 <template>
@@ -15,11 +16,16 @@ const value = ref<string[]>([]);
         v-for="action in props.actions"
         :key="action"
         class="ui-action-recorder__btn"
-        @click="value.push(action)"
+        @click="emit('update:modelValue', [...modelValue, action])"
       >
         {{ action }}
       </button>
-      <button @click="value = []">Reset</button>
+      <button @click="emit('update:modelValue', [])">Reset</button>
+    </div>
+    <div class="ui-action-recorder__records">
+      <div v-for="(record, i) in modelValue" :key="i">
+        {{ record }}
+      </div>
     </div>
   </div>
 </template>

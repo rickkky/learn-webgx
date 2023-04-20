@@ -2,6 +2,7 @@ import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
 import imageSource from './leaves.jpg';
+import { createUi } from '/common/ui';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const gl = canvas.getContext('webgl2')!;
@@ -199,7 +200,24 @@ const kernels: Record<string, number[]> = {
 const kernelLocation = gl.getUniformLocation(program, 'u_kernel[0]');
 const kernelWeightLocation = gl.getUniformLocation(program, 'u_kernelWeight');
 
-drawEffects();
+createUi(
+  {
+    payloads: [
+      {
+        key: 'effects',
+        type: 'action-recorder',
+        props: {
+          actions: Object.keys(kernels),
+        },
+        default: [],
+      },
+    ],
+  },
+  (data) => {
+    const { effects } = data;
+    drawEffects(effects);
+  },
+);
 
 function loadImage(imageSource: string) {
   const image = new Image();
@@ -220,15 +238,9 @@ function createAndSetupTexture() {
   return texture;
 }
 
-function drawEffects() {
+function drawEffects(effects: string[]) {
   gl.activeTexture(gl.TEXTURE0 + 0);
   gl.bindTexture(gl.TEXTURE_2D, originalTexture);
-  const effects: string[] = [
-    'sharpen',
-    'emboss',
-    'gaussianBlur',
-    'triangleBlur',
-  ];
   let count = 0;
   for (let i = 0; i < effects.length; i++) {
     setFrameBuffer(framebuffers[count % 2], image.width, image.height);
