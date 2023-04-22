@@ -200,26 +200,20 @@ const kernels: Record<string, number[]> = {
 const kernelLocation = gl.getUniformLocation(program, 'u_kernel[0]');
 const kernelWeightLocation = gl.getUniformLocation(program, 'u_kernelWeight');
 
-createUi(
-  {
-    payloads: [
-      {
-        key: 'effects',
-        type: 'action-recorder',
-        props: {
-          actions: Object.keys(kernels),
-        },
-        default: [],
-      },
-    ],
+const ui = await createUi();
+const effects = ui.setup({
+  key: 'effect',
+  type: 'action-recorder',
+  props: {
+    actions: Object.keys(kernels),
   },
-  (data) => {
-    const { effects } = data;
-    drawEffects(effects);
-  },
-);
+  default: [],
+});
+ui.settle(() => {
+  drawEffects(effects.value);
+});
 
-function loadImage(imageSource: string) {
+function loadImage(imageSource: string): Promise<HTMLImageElement> {
   const image = new Image();
   image.src = imageSource;
   return new Promise<HTMLImageElement>((resolve, reject) => {
