@@ -56,6 +56,8 @@ gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 const resolutionLocation = gl.getUniformLocation(program, 'u_resolution');
 gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
 
+const flipYLocation = gl.getUniformLocation(program, 'u_flipY');
+
 const imageLocation = gl.getUniformLocation(program, 'u_image');
 gl.uniform1i(imageLocation, 0);
 
@@ -83,10 +85,9 @@ for (let i = 0; i < 2; i++) {
   framebuffers.push(fbo);
   gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
 
-  const attachmentPoint = gl.COLOR_ATTACHMENT0;
   gl.framebufferTexture2D(
     gl.FRAMEBUFFER,
-    attachmentPoint,
+    gl.COLOR_ATTACHMENT0,
     gl.TEXTURE_2D,
     texture,
     0,
@@ -209,9 +210,11 @@ const effects = ui.setup({
   },
   default: [],
 });
-ui.settle(() => {
+ui.settle(render);
+
+function render() {
   drawEffects(effects.value);
-});
+}
 
 function loadImage(imageSource: string): Promise<HTMLImageElement> {
   const image = new Image();
@@ -235,6 +238,7 @@ function createAndSetupTexture() {
 function drawEffects(effects: string[]) {
   gl.activeTexture(gl.TEXTURE0 + 0);
   gl.bindTexture(gl.TEXTURE_2D, originalTexture);
+  gl.uniform1f(flipYLocation, 1);
   let count = 0;
   for (let i = 0; i < effects.length; i++) {
     setFrameBuffer(framebuffers[count % 2], image.width, image.height);
@@ -242,6 +246,7 @@ function drawEffects(effects: string[]) {
     gl.bindTexture(gl.TEXTURE_2D, textures[count % 2]);
     count += 1;
   }
+  gl.uniform1f(flipYLocation, -1);
   setFrameBuffer(null, gl.canvas.width, gl.canvas.height);
   drawWithKernel('normal');
 }
