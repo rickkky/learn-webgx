@@ -203,7 +203,7 @@ const kernelWeightLocation = gl.getUniformLocation(program, 'u_kernelWeight');
 
 const ui = await createUi();
 const effects = ui.setup({
-  key: 'effect',
+  label: 'Effects',
   type: 'action-recorder',
   props: {
     actions: Object.keys(kernels),
