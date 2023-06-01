@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const props = defineProps<{
-  actions: string[];
   modelValue: string[];
+  actions: string[];
 }>();
 
 const emit = defineEmits<{

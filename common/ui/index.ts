@@ -7,13 +7,13 @@ export type ControlMap = {
 };
 
 export interface ControlPayload<K extends string, T extends keyof ControlMap> {
-  key: K;
+  label: K;
   type: T;
   props: Omit<InstanceType<ControlMap[T]>['$props'], 'modelValue'>;
   default: InstanceType<ControlMap[T]>['$props']['modelValue'];
 }
 
-export type ControlPayloadLIst = ControlPayload<string, keyof ControlMap>[];
+export type ControlPayloadList = ControlPayload<string, keyof ControlMap>[];
 
 export type UiExposed = {
   setup: <T extends keyof ControlMap>(

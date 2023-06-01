@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const props = defineProps<{
-  label: string;
   modelValue: boolean;
+  label: string;
 }>();
 
 const emit = defineEmits<{
