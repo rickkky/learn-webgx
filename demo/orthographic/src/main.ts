@@ -1,12 +1,11 @@
 import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
-import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
-import { createUi } from '/common/ui';
+import vertexShaderSource from './vertex.glsl';
+import * as data from './data';
+import { statehub, state } from './state';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const gl = canvas.getContext('webgl2')!;
-
-const ui = await createUi();
 
 const program = createProgram(gl, vertexShaderSource, fragmentShaderSource);
 
@@ -15,161 +14,50 @@ const vao = gl.createVertexArray();
 const positionLocation = gl.getAttribLocation(program, 'a_position');
 const positionBuffer = gl.createBuffer();
 
+const colorLocation = gl.getAttribLocation(program, 'a_color');
+const colorBuffer = gl.createBuffer();
+
 const matrixLocation = gl.getUniformLocation(program, 'u_matrix');
 
-const ox = ui.setup({
-  label: 'Origin X',
-  type: 'slider',
-  props: {
-    min: 0,
-    max: 70,
-  },
-  default: 0,
-});
-const oy = ui.setup({
-  label: 'Origin Y',
-  type: 'slider',
-  props: {
-    min: -10,
-    max: 10,
-  },
-  default: 0,
-});
-const oz = ui.setup({
-  label: 'Origin Z',
-  type: 'slider',
-  props: {
-    min: -10,
-    max: 10,
-  },
-  default: 0,
-});
-const sx = ui.setup({
-  label: 'Scale X',
-  type: 'slider',
-  props: {
-    min: -2,
-    max: 2,
-  },
-  default: 1,
-});
-const sy = ui.setup({
-  label: 'Scale Y',
-  type: 'slider',
-  props: {
-    min: -2,
-    max: 2,
-  },
-  default: 1,
-});
-const sz = ui.setup({
-  label: 'Scale Z',
-  type: 'slider',
-  props: {
-    min: -2,
-    max: 2,
-  },
-  default: 1,
-});
-const rx = ui.setup({
-  label: 'rotate X ',
-  type: 'slider',
-  props: {
-    min: 0,
-    max: 360,
-  },
-  default: 0,
-});
-const ry = ui.setup({
-  label: 'rotate y',
-  type: 'slider',
-  props: {
-    min: 0,
-    max: 360,
-  },
-  default: 0,
-});
-const rz = ui.setup({
-  label: 'rotate Z ',
-  type: 'slider',
-  props: {
-    min: 0,
-    max: 360,
-  },
-  default: 0,
-});
-const tx = ui.setup({
-  label: 'Translate X',
-  type: 'slider',
-  props: {
-    min: 0,
-    max: 200,
-  },
-  default: 70,
-});
-const ty = ui.setup({
-  label: 'Translate Y',
-  type: 'slider',
-  props: {
-    min: 0,
-    max: 200,
-  },
-  default: 70,
-});
-const tz = ui.setup({
-  label: 'Translate Z',
-  type: 'slider',
-  props: {
-    min: 0,
-    max: 200,
-  },
-  default: 70,
-});
-
-ui.settle(render);
+statehub.settle(render);
 
 function render() {
   resizeCanavsToDisplaySize(gl.canvas as HTMLCanvasElement);
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
   gl.clearColor(0, 0, 0, 0);
-  gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   gl.useProgram(program);
 
   gl.bindVertexArray(vao);
 
-  // prettier-ignore
-  const positions = [
-    0,   5,  0,
-    0,  -5,  0,
-    60, -5,  0,
-    60, -5,  0,
-    60,  5,  0,
-    0,   5,  0,
-    60, -10, 0,
-    80,  0,  0,
-    60,  0,  0,
-    60,  0,  0,
-    80,  0,  0,
-    60,  10, 0,
-  ];
+  const positions = data.positions;
   gl.enableVertexAttribArray(positionLocation);
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
   gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
 
+  const colors = data.colors;
+  gl.enableVertexAttribArray(colorLocation);
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(colors), gl.STATIC_DRAW);
+  gl.vertexAttribPointer(colorLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
+
   const matrix = transform(
-    projection(gl.canvas.width, gl.canvas.height, 400),
-    translation(tx.value, ty.value, tz.value),
-    translation(ox.value, oy.value, oz.value),
-    rotationZ((rz.value * Math.PI) / 180),
-    rotationY((ry.value * Math.PI) / 180),
-    rotationX((rx.value * Math.PI) / 180),
-    scaling(sx.value, sy.value, sz.value),
-    translation(-ox.value, -oy.value, -oz.value),
+    orthographic(0, gl.canvas.width, 0, gl.canvas.height, -400, 400),
+    translation(state.tx, state.ty, state.tz),
+    translation(state.ox, state.oy, state.oz),
+    rotationZ((state.rz * Math.PI) / 180),
+    rotationY((state.ry * Math.PI) / 180),
+    rotationX((state.rx * Math.PI) / 180),
+    scaling(state.sx, state.sy, state.sz),
+    translation(-state.ox, -state.oy, -state.oz),
   );
-  gl.uniformMatrix3fv(matrixLocation, false, matrix);
+  gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
+  gl.enable(gl.CULL_FACE);
+  gl.enable(gl.DEPTH_TEST);
 
   gl.drawArrays(gl.TRIANGLES, 0, positions.length / 2);
 }
@@ -209,13 +97,43 @@ function multiply(a: number[], b: number[]) {
   return c;
 }
 
-function projection(width: number, height: number, depth: number) {
+/**
+ * Transformation to convert data coordinate to clip space coordinate.
+ *
+ * Data coordinate system:
+ * - x: left to right;
+ * - y: top to bottom;
+ * - z: near to far.
+ *
+ * Clip space range: -1 to 1.
+ * Clip space coordinate system:
+ * - x: left to right;
+ * - y: bottom to top;
+ * - z: near to far.
+ */
+function orthographic(
+  left: number,
+  right: number,
+  top: number,
+  bottom: number,
+  near: number,
+  far: number,
+) {
+  const width = right - left;
+  const height = bottom - top;
+  const depth = far - near;
+  const sx = 2 / width;
+  const sy = -2 / height;
+  const sz = 2 / depth;
+  const tx = -(right + left) / width;
+  const ty = (top + bottom) / height;
+  const tz = -(near + far) / depth;
   // prettier-ignore
   return [
-     2 / width,  0,          0,         0,
-     0,         -2 / height, 0,         0,
-     0,          0,          2 / depth, 0,
-    -1,          1,          0,         1,
+    sx,  0,  0,  0,
+    0,   sy, 0,  0,
+    0,   0,  sz, 0,
+    tx,  ty, tz, 1,
   ]
 }
 
@@ -224,23 +142,25 @@ function translation(tx: number, ty: number, tz: number) {
   return [
     1,  0,  0,  0,
     0,  1,  0,  0,
-    0,  1,  1,  0,
+    0,  0,  1,  0,
     tx, ty, tz, 1,
   ];
 }
 
+// Rotate direction: facing negative x axis with counter-clockwise.
 function rotationX(rad: number) {
   const c = Math.cos(rad);
   const s = Math.sin(rad);
   // prettier-ignore
   return [
-    1, 0,  0, 0,
-    0, c, -s, 0,
-    0, s,  c, 0,
-    0, 0,  0, 1,
+    1,  0, 0, 0,
+    0,  c, s, 0,
+    0, -s, c, 0,
+    0,  0, 0, 1,
   ];
 }
 
+// Rotate direction: facing negative y axis with counter-clockwise.
 function rotationY(rad: number) {
   const c = Math.cos(rad);
   const s = Math.sin(rad);
@@ -253,16 +173,17 @@ function rotationY(rad: number) {
   ];
 }
 
+// Rotate direction: facing negative z axis with counter-clockwise.
 function rotationZ(rad: number) {
   const c = Math.cos(rad);
   const s = Math.sin(rad);
   // prettier-ignore
   return [
-      c, -s, 0, 0,
-      s,  c, 0, 0,
-      0,  0, 1, 0,
-      0,  0, 0, 1,
-    ];
+     c, s, 0, 0,
+    -s, c, 0, 0,
+     0, 0, 1, 0,
+     0, 0, 0, 1,
+  ];
 }
 
 function scaling(sx: number, sy: number, sz: number) {
