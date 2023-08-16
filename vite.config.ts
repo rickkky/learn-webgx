@@ -6,5 +6,6 @@ export default defineConfig({
   plugins: [vue(), glsl()],
   server: {
     host: true,
+    port: 5000,
   },
 });
