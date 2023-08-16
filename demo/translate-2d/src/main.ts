@@ -1,12 +1,12 @@
 import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
-import { createUi } from '/common/ui';
+import { createStatehub } from '/common/statehub';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const gl = canvas.getContext('webgl2')!;
 
-const ui = await createUi();
+const statehub = await createStatehub();
 
 const program = createProgram(gl, vertexShaderSource, fragmentShaderSource);
 
@@ -17,7 +17,7 @@ const positionBuffer = gl.createBuffer();
 
 const translationLocation = gl.getUniformLocation(program, 'u_translation');
 
-const translateX = ui.setup({
+const translateX = statehub.setup({
   label: 'Translate X',
   type: 'slider',
   props: {
@@ -26,7 +26,7 @@ const translateX = ui.setup({
   },
   default: 0,
 });
-const translateY = ui.setup({
+const translateY = statehub.setup({
   label: 'Translate Y',
   type: 'slider',
   props: {
@@ -36,7 +36,7 @@ const translateY = ui.setup({
   default: 0,
 });
 
-ui.settle(render);
+statehub.settle(render);
 
 function render() {
   resizeCanavsToDisplaySize(gl.canvas as HTMLCanvasElement);

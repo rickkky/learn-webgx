@@ -10,7 +10,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="ui-checkbox">
+  <div class="statehub-checkbox">
     <input
       type="checkbox"
       :checked="props.modelValue"

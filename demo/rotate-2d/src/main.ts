@@ -1,12 +1,12 @@
 import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
-import { createUi } from '/common/ui';
+import { createStatehub } from '/common/statehub';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const gl = canvas.getContext('webgl2')!;
 
-const ui = await createUi();
+const statehub = await createStatehub();
 
 const program = createProgram(gl, vertexShaderSource, fragmentShaderSource);
 
@@ -17,7 +17,7 @@ const positionBuffer = gl.createBuffer();
 
 const rotationLocation = gl.getUniformLocation(program, 'u_rotation');
 
-const angle = ui.setup({
+const angle = statehub.setup({
   label: 'Angle',
   type: 'slider',
   props: {
@@ -27,7 +27,7 @@ const angle = ui.setup({
   default: 0,
 });
 
-ui.settle(render);
+statehub.settle(render);
 
 function render() {
   resizeCanavsToDisplaySize(gl.canvas as HTMLCanvasElement);

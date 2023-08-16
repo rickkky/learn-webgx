@@ -1,12 +1,12 @@
 import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
-import { createUi } from '/common/ui';
+import { createStatehub } from '/common/statehub';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const gl = canvas.getContext('webgl2')!;
 
-const ui = await createUi();
+const statehub = await createStatehub();
 
 const program = createProgram(gl, vertexShaderSource, fragmentShaderSource);
 
@@ -17,25 +17,25 @@ const positionBuffer = gl.createBuffer();
 
 const matrixLocation = gl.getUniformLocation(program, 'u_matrix');
 
-const ox = ui.setup({
+const ox = statehub.setup({
   label: 'Origin X',
   type: 'slider',
   props: {
     min: 0,
-    max: 70,
+    max: 100,
   },
   default: 0,
 });
-const oy = ui.setup({
+const oy = statehub.setup({
   label: 'Origin Y',
   type: 'slider',
   props: {
-    min: -10,
-    max: 10,
+    min: 0,
+    max: -15,
   },
   default: 0,
 });
-const sx = ui.setup({
+const sx = statehub.setup({
   label: 'Scale X',
   type: 'slider',
   props: {
@@ -44,7 +44,7 @@ const sx = ui.setup({
   },
   default: 1,
 });
-const sy = ui.setup({
+const sy = statehub.setup({
   label: 'Scale Y',
   type: 'slider',
   props: {
@@ -53,35 +53,35 @@ const sy = ui.setup({
   },
   default: 1,
 });
-const angle = ui.setup({
+const angle = statehub.setup({
   label: 'Angle',
   type: 'slider',
   props: {
     min: 0,
     max: 360,
   },
-  default: 0,
+  default: 45,
 });
-const tx = ui.setup({
+const tx = statehub.setup({
   label: 'Translate X',
   type: 'slider',
   props: {
     min: 0,
     max: 200,
   },
-  default: 80,
+  default: 100,
 });
-const ty = ui.setup({
+const ty = statehub.setup({
   label: 'Translate Y',
   type: 'slider',
   props: {
     min: 0,
     max: 200,
   },
-  default: 80,
+  default: 100,
 });
 
-ui.settle(render);
+statehub.settle(render);
 
 function render() {
   resizeCanavsToDisplaySize(gl.canvas as HTMLCanvasElement);
@@ -96,18 +96,17 @@ function render() {
 
   // prettier-ignore
   const positions = [
-    0,   5,
-    0,  -5,
-    60, -5,
-    60, -5,
-    60,  5,
-    0,   5,
-    60, -10,
-    80,  0,
-    60,  0,
-    60,  0,
-    80,  0,
-    60,  10,
+    0,    0,
+    0,   -10,
+    70,  -10,
+
+    0,    0,
+    70,  -10,
+    70,   0,
+
+    70,   0,
+    70,  -20,
+    100,  0,
   ];
   gl.enableVertexAttribArray(positionLocation);
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -155,11 +154,16 @@ function multiply(a: number[], b: number[]) {
 }
 
 function projection(width: number, height: number) {
+  const sx = 2 / width;
+  // flip y
+  const sy = -2 / height;
+  const tx = -1;
+  const ty = 1;
   // prettier-ignore
   return [
-     2 / width,  0,          0,
-     0,         -2 / height, 0,
-    -1,          1,          1,
+    sx,  0,  0,
+    0,   sy, 0,
+    tx,  ty, 1,
   ]
 }
 

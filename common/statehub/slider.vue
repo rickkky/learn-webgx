@@ -80,38 +80,40 @@ function ratioToValue(ratio: number) {
 </script>
 
 <template>
-  <div class="ui-slider">
-    <div class="ui-slider__rail-wrap">
+  <div class="statehub-slider">
+    <div class="statehub-slider__rail-wrap">
       <div
         ref="railRef"
-        class="ui-slider__rail"
+        class="statehub-slider__rail"
         @mousedown="handleRailMouseDown"
       ></div>
-      <div ref="fillRef" class="ui-slider__fill"></div>
+      <div ref="fillRef" class="statehub-slider__fill"></div>
       <div
         ref="blockRef"
-        class="ui-slider__block"
+        class="statehub-slider__block"
         @mousedown="handleBlockMouseDown"
       ></div>
     </div>
-    <span class="ui-slider__value">{{ props.modelValue.toFixed(2) }}</span>
+    <span class="statehub-slider__value">
+      {{ props.modelValue.toFixed(2) }}
+    </span>
   </div>
 </template>
 
 <style lang="scss">
-.ui-slider {
+.statehub-slider {
   display: flex;
   align-items: center;
   user-select: none;
 }
-.ui-slider__rail-wrap {
+.statehub-slider__rail-wrap {
   position: relative;
   flex: auto;
   height: 4px;
   margin-left: 6px;
   margin-right: 16px;
 }
-.ui-slider__rail {
+.statehub-slider__rail {
   position: absolute;
   top: 0;
   left: 0;
@@ -122,7 +124,7 @@ function ratioToValue(ratio: number) {
   background-color: #e0e0e0;
   cursor: pointer;
 }
-.ui-slider__fill {
+.statehub-slider__fill {
   position: absolute;
   top: 0;
   left: 0;
@@ -132,7 +134,7 @@ function ratioToValue(ratio: number) {
   background-color: #007aff;
   pointer-events: none;
 }
-.ui-slider__block {
+.statehub-slider__block {
   position: absolute;
   top: 50%;
   left: 0;
@@ -148,7 +150,7 @@ function ratioToValue(ratio: number) {
     inset 0 0 1px 0 rgba(0, 0, 0, 0.05);
   cursor: pointer;
 }
-.ui-slider__value {
+.statehub-slider__value {
   width: 48px;
   font-size: 14px;
   overflow: hidden;

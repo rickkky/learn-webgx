@@ -2,7 +2,7 @@ import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
 import imageSource from './leaves.jpg';
-import { createUi } from '/common/ui';
+import { createStatehub } from '/common/statehub';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const gl = canvas.getContext('webgl2')!;
@@ -201,8 +201,8 @@ const kernels: Record<string, number[]> = {
 const kernelLocation = gl.getUniformLocation(program, 'u_kernel[0]');
 const kernelWeightLocation = gl.getUniformLocation(program, 'u_kernelWeight');
 
-const ui = await createUi();
-const effects = ui.setup({
+const statehub = await createStatehub();
+const effects = statehub.setup({
   label: 'Effects',
   type: 'action-recorder',
   props: {
@@ -210,7 +210,7 @@ const effects = ui.setup({
   },
   default: [],
 });
-ui.settle(render);
+statehub.settle(render);
 
 function render() {
   drawEffects(effects.value);
