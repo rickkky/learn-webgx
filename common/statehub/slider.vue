@@ -151,7 +151,7 @@ function ratioToValue(ratio: number) {
   cursor: pointer;
 }
 .statehub-slider__value {
-  width: 48px;
+  width: 56px;
   font-size: 14px;
   overflow: hidden;
   white-space: nowrap;
