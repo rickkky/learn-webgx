@@ -57,7 +57,7 @@ function render() {
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
   gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 
-  const radian = (angle.value * Math.PI) / 180;
+  const radian = angle.value * (Math.PI / 180);
   const rotateX = Math.cos(radian);
   const rotateY = Math.sin(radian);
   gl.uniform2fv(rotationLocation, [rotateX, rotateY]);

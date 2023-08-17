@@ -45,19 +45,27 @@ function render() {
   gl.vertexAttribPointer(colorLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
 
   const matrix = transform(
-    orthographic(0, gl.canvas.width, 0, gl.canvas.height, -400, 400),
+    orthographic(0, gl.canvas.width, gl.canvas.height, 0, -400, 400),
     translation(state.tx, state.ty, state.tz),
     translation(state.ox, state.oy, state.oz),
-    rotationZ((state.rz * Math.PI) / 180),
-    rotationY((state.ry * Math.PI) / 180),
-    rotationX((state.rx * Math.PI) / 180),
+    rotationZ(state.rz * (Math.PI / 180)),
+    rotationY(state.ry * (Math.PI / 180)),
+    rotationX(state.rx * (Math.PI / 180)),
     scaling(state.sx, state.sy, state.sz),
     translation(-state.ox, -state.oy, -state.oz),
   );
   gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
-  gl.enable(gl.CULL_FACE);
-  gl.enable(gl.DEPTH_TEST);
+  if (state.enableCullFace) {
+    gl.enable(gl.CULL_FACE);
+  } else {
+    gl.disable(gl.CULL_FACE);
+  }
+  if (state.enableDepthTest) {
+    gl.enable(gl.DEPTH_TEST);
+  } else {
+    gl.disable(gl.DEPTH_TEST);
+  }
 
   gl.drawArrays(gl.TRIANGLES, 0, positions.length / 2);
 }
@@ -114,8 +122,8 @@ function multiply(a: number[], b: number[]) {
 function orthographic(
   left: number,
   right: number,
-  top: number,
   bottom: number,
+  top: number,
   near: number,
   far: number,
 ) {

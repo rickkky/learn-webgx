@@ -117,7 +117,7 @@ function render() {
     projection(gl.canvas.width, gl.canvas.height),
     translation(tx.value, ty.value),
     translation(ox.value, oy.value),
-    rotation((angle.value * Math.PI) / 180),
+    rotation(angle.value * (Math.PI / 180)),
     scaling(sx.value, sy.value),
     translation(-ox.value, -oy.value),
   );

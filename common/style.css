@@ -48,7 +48,7 @@ body,
   overflow: auto;
   display: block;
   width: 240px;
-  max-height: 50vh;
+  max-height: calc(100vh - 32px);
   padding: 8px;
   border-radius: 8px;
   background-color: #ffffff;

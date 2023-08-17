@@ -110,6 +110,22 @@ export const tz = statehub.setup({
   },
   default: 0,
 });
+export const enableCullFace = statehub.setup({
+  label: 'Enable Culling Face',
+  type: 'checkbox',
+  props: {
+    label: '',
+  },
+  default: true,
+});
+export const enableDepthTest = statehub.setup({
+  label: 'Enable Depth Test',
+  type: 'checkbox',
+  props: {
+    label: '',
+  },
+  default: true,
+});
 
 export const state = {
   get ox() {
@@ -147,5 +163,11 @@ export const state = {
   },
   get tz() {
     return tz.value;
+  },
+  get enableCullFace() {
+    return enableCullFace.value;
+  },
+  get enableDepthTest() {
+    return enableDepthTest.value;
   },
 };
