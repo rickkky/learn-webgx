@@ -63,7 +63,7 @@ export const rx = statehub.setup({
     min: -360,
     max: 360,
   },
-  default: 45,
+  default: 0,
 });
 export const ry = statehub.setup({
   label: 'Rotate Y',
@@ -72,7 +72,7 @@ export const ry = statehub.setup({
     min: -360,
     max: 360,
   },
-  default: 45,
+  default: 0,
 });
 export const rz = statehub.setup({
   label: 'Rotate Z ',
@@ -81,7 +81,7 @@ export const rz = statehub.setup({
     min: -360,
     max: 360,
   },
-  default: -45,
+  default: 0,
 });
 export const tx = statehub.setup({
   label: 'Translate X',
