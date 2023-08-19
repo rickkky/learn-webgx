@@ -67,7 +67,7 @@ function render() {
     gl.disable(gl.DEPTH_TEST);
   }
 
-  gl.drawArrays(gl.TRIANGLES, 0, positions.length / 2);
+  gl.drawArrays(gl.TRIANGLES, 0, positions.length / 3);
 }
 
 function transform(...ms: number[][]) {
