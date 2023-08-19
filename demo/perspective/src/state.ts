@@ -45,7 +45,7 @@ export const sy = statehub.setup({
     min: -2,
     max: 2,
   },
-  default: -1,
+  default: 1,
 });
 export const sz = statehub.setup({
   label: 'Scale Z',
@@ -63,7 +63,7 @@ export const rx = statehub.setup({
     min: -360,
     max: 360,
   },
-  default: 45,
+  default: 225,
 });
 export const ry = statehub.setup({
   label: 'Rotate Y',
@@ -72,7 +72,7 @@ export const ry = statehub.setup({
     min: -360,
     max: 360,
   },
-  default: -45,
+  default: 45,
 });
 export const rz = statehub.setup({
   label: 'Rotate Z ',
@@ -125,7 +125,7 @@ export const enableCullFace = statehub.setup({
   props: {
     label: '',
   },
-  default: false,
+  default: true,
 });
 export const enableDepthTest = statehub.setup({
   label: 'Enable Depth Test',
