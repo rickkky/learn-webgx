@@ -116,7 +116,7 @@ export const enableCullFace = statehub.setup({
   props: {
     label: '',
   },
-  default: true,
+  default: false,
 });
 export const enableDepthTest = statehub.setup({
   label: 'Enable Depth Test',

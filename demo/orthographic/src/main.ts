@@ -106,9 +106,9 @@ function multiply(a: number[], b: number[]) {
 }
 
 /**
- * Transformation to convert data coordinate to clip space coordinate.
+ * Transformation to convert model coordinate to clip space coordinate.
  *
- * Data coordinate system:
+ * Model coordinate system:
  * - x: left to right;
  * - y: top to bottom;
  * - z: near to far.
