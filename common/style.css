@@ -47,7 +47,8 @@ body,
   right: 16px;
   overflow: auto;
   display: block;
-  width: 240px;
+  box-sizing: border-box;
+  width: 260px;
   max-height: calc(100vh - 32px);
   padding: 8px;
   border-radius: 8px;
