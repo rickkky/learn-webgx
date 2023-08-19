@@ -45,7 +45,7 @@ export const sy = statehub.setup({
     min: -2,
     max: 2,
   },
-  default: 1,
+  default: -1,
 });
 export const sz = statehub.setup({
   label: 'Scale Z',
@@ -63,7 +63,7 @@ export const rx = statehub.setup({
     min: -360,
     max: 360,
   },
-  default: 0,
+  default: 45,
 });
 export const ry = statehub.setup({
   label: 'Rotate Y',
@@ -72,7 +72,7 @@ export const ry = statehub.setup({
     min: -360,
     max: 360,
   },
-  default: 0,
+  default: -45,
 });
 export const rz = statehub.setup({
   label: 'Rotate Z ',
@@ -81,7 +81,7 @@ export const rz = statehub.setup({
     min: -360,
     max: 360,
   },
-  default: 0,
+  default: 45,
 });
 export const tx = statehub.setup({
   label: 'Translate X',
@@ -90,7 +90,7 @@ export const tx = statehub.setup({
     min: -400,
     max: 400,
   },
-  default: -150,
+  default: 0,
 });
 export const ty = statehub.setup({
   label: 'Translate Y',
@@ -105,10 +105,10 @@ export const tz = statehub.setup({
   label: 'Translate Z',
   type: 'slider',
   props: {
-    min: -400,
-    max: 400,
+    min: -1000,
+    max: 1000,
   },
-  default: -360,
+  default: -400,
 });
 export const fov = statehub.setup({
   label: 'Field of View',
@@ -125,7 +125,7 @@ export const enableCullFace = statehub.setup({
   props: {
     label: '',
   },
-  default: true,
+  default: false,
 });
 export const enableDepthTest = statehub.setup({
   label: 'Enable Depth Test',

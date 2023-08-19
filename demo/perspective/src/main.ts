@@ -110,15 +110,82 @@ function multiply(a: number[], b: number[]) {
   return c;
 }
 
+/**
+ * Convert the view frustum to clip space.
+ * Observer is at (0, 0, 0) and facing negative z axis.
+ *
+ * Model coordinate system:
+ * - x: left to right;
+ * - y: bottom to top;
+ * - z: near to far.
+ *
+ * Clip space range: -1 to 1.
+ * Clip space coordinate system:
+ * - x: left to right;
+ * - y: bottom to top;
+ * - z: near to far.
+ *
+ * @param fov - field of view of y-z plane in radian
+ * @param aspect - width / height
+ * @param near - distance to near plane
+ * @param far - distance to far plane
+ */
 function perspective(fov: number, aspect: number, near: number, far: number) {
-  const f = Math.tan(0.5 * Math.PI - 0.5 * fov);
+  /**
+   * For x and y:
+   *
+   * Define: f = 1 / tan(fov / 2)
+   *
+   * edgeY = -modelZ * tan(fov / 2)
+   *       = -modelZ / f
+   * edgeX = edgeY * aspect
+   *
+   * clipY = modelY / edgeY
+   *       = modelY * f / -modelZ
+   * clipX = modelX / edgeX
+   *       = modelX * f / (-modelZ * aspect)
+   *
+   * The transformed w will be -modelZ.
+   * So:
+   * sx = f / aspect
+   * sy = f
+   */
+  const f = 1 / Math.tan(fov / 2);
+  const sx = f / aspect;
+  const sy = f;
+  const wz = -1;
+  /**
+   * For z:
+   *
+   * Use reciprocal function so that
+   * z values close the camera get more resolution
+   * than z values far from the camera.
+   *
+   * Assume: clipZ = s / modelZ + c
+   *               = -s / -modelZ + c * -modelZ / -modelZ
+   *               = (-c * modelZ - s) / modelZ
+   *
+   * Consider the near and far plane:
+   * s / -near + c = -1
+   * s / -far  + c = 1
+   *
+   * The solution is:
+   * s = 2 * near * far / (far - near)
+   * c = (near + far) / (far - near)
+   *
+   * So:
+   * sz = -c
+   * tz = -s
+   */
   const rangeInv = 1 / (near - far);
+  const sz = (near + far) * rangeInv;
+  const tz = 2 * near * far * rangeInv;
   // prettier-ignore
   return [
-    f / aspect, 0, 0,                         0,
-    0,          f, 0,                         0,
-    0,          0, (near + far) * rangeInv,  -1,
-    0,          0, 2 * near * far * rangeInv, 0,
+    sx, 0,  0,  0,
+    0,  sy, 0,  0,
+    0,  0,  sz, wz,
+    0,  0,  tz, 0,
   ]
 }
 
