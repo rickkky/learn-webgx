@@ -95,7 +95,7 @@ function ratioToValue(ratio: number) {
       ></div>
     </div>
     <span class="statehub-slider__value">
-      {{ props.modelValue.toFixed(2) }}
+      {{ props.modelValue.toFixed(1) }}
     </span>
   </div>
 </template>
