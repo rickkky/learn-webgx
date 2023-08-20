@@ -6,7 +6,9 @@ import {
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
 import { statehub, state, kernels } from './state';
-import imageSource from './leaves.jpg';
+import imageSource from '/asset/leaves.jpg';
+
+const image = await loadImage(imageSource);
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const gl = canvas.getContext('webgl2')!;
@@ -17,12 +19,8 @@ gl.useProgram(program);
 const vao = gl.createVertexArray();
 gl.bindVertexArray(vao);
 
-const image = await loadImage(imageSource);
-
 const positionLocation = gl.getAttribLocation(program, 'a_position');
-gl.enableVertexAttribArray(positionLocation);
 const positionBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 // prettier-ignore
 const positions = [
   0,           0,
@@ -33,13 +31,13 @@ const positions = [
   image.width, 0,
   image.width, image.height,
 ];
+gl.enableVertexAttribArray(positionLocation);
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 
 const texCoordLocation = gl.getAttribLocation(program, 'a_texCoord');
-gl.enableVertexAttribArray(texCoordLocation);
 const texCoordBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
 // prettier-ignore
 const texCoords = [
   0, 0,
@@ -49,6 +47,8 @@ const texCoords = [
   1, 0,
   1, 1,
 ];
+gl.enableVertexAttribArray(texCoordLocation);
+gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoords), gl.STATIC_DRAW);
 gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 

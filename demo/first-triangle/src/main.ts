@@ -27,12 +27,8 @@ gl.bindVertexArray(vao);
 
 // Get the location of the `a_position` attribute in the vertex shader.
 const positionLocation = gl.getAttribLocation(program, 'a_position');
-// Turn on the attribute
-gl.enableVertexAttribArray(positionLocation);
 // Create a buffer.
 const positionBuffer = gl.createBuffer();
-// Bind it to `ARRAY_BUFFER` bind point.
-gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 // Vertex data.
 // prettier-ignore
 const positions = [
@@ -40,11 +36,16 @@ const positions = [
   0, 0.5,
   1, 0,
 ];
+const positionSize = 2;
+// Turn on the attribute
+gl.enableVertexAttribArray(positionLocation);
+// Bind it to `ARRAY_BUFFER` bind point.
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 // Put the data in the buffer.
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 // Specify how to pull the data out of the buffer.
 // It implicitly binds the current `ARRAY_BUFFER` to the attribute.
-gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+gl.vertexAttribPointer(positionLocation, positionSize, gl.FLOAT, false, 0, 0);
 
 // Render primitives from array data by executing the shader program.
-gl.drawArrays(gl.TRIANGLES, 0, 3);
+gl.drawArrays(gl.TRIANGLES, 0, positions.length / positionSize);

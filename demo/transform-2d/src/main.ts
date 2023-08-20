@@ -1,12 +1,11 @@
 import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
-import { createStatehub } from '/common/statehub';
+import * as data from './data';
+import { statehub, state } from './state';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const gl = canvas.getContext('webgl2')!;
-
-const statehub = await createStatehub();
 
 const program = createProgram(gl, vertexShaderSource, fragmentShaderSource);
 
@@ -14,72 +13,10 @@ const vao = gl.createVertexArray();
 
 const positionLocation = gl.getAttribLocation(program, 'a_position');
 const positionBuffer = gl.createBuffer();
+const positions = data.positions;
+const positionSize = data.positionSize;
 
 const matrixLocation = gl.getUniformLocation(program, 'u_matrix');
-
-const ox = statehub.setup({
-  label: 'Origin X',
-  type: 'slider',
-  props: {
-    min: 0,
-    max: 100,
-  },
-  default: 0,
-});
-const oy = statehub.setup({
-  label: 'Origin Y',
-  type: 'slider',
-  props: {
-    min: 0,
-    max: -15,
-  },
-  default: 0,
-});
-const sx = statehub.setup({
-  label: 'Scale X',
-  type: 'slider',
-  props: {
-    min: -2,
-    max: 2,
-  },
-  default: 1,
-});
-const sy = statehub.setup({
-  label: 'Scale Y',
-  type: 'slider',
-  props: {
-    min: -2,
-    max: 2,
-  },
-  default: 1,
-});
-const angle = statehub.setup({
-  label: 'Angle',
-  type: 'slider',
-  props: {
-    min: 0,
-    max: 360,
-  },
-  default: 45,
-});
-const tx = statehub.setup({
-  label: 'Translate X',
-  type: 'slider',
-  props: {
-    min: 0,
-    max: 200,
-  },
-  default: 100,
-});
-const ty = statehub.setup({
-  label: 'Translate Y',
-  type: 'slider',
-  props: {
-    min: 0,
-    max: 200,
-  },
-  default: 100,
-});
 
 statehub.settle(render);
 
@@ -94,36 +31,22 @@ function render() {
 
   gl.bindVertexArray(vao);
 
-  // prettier-ignore
-  const positions = [
-    0,    0,
-    0,   -10,
-    70,  -10,
-
-    0,    0,
-    70,  -10,
-    70,   0,
-
-    70,   0,
-    70,  -20,
-    100,  0,
-  ];
   gl.enableVertexAttribArray(positionLocation);
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(positionLocation, positionSize, gl.FLOAT, false, 0, 0);
 
   const matrix = transform(
     projection(gl.canvas.width, gl.canvas.height),
-    translation(tx.value, ty.value),
-    translation(ox.value, oy.value),
-    rotation(angle.value * (Math.PI / 180)),
-    scaling(sx.value, sy.value),
-    translation(-ox.value, -oy.value),
+    translation(state.tx, state.ty),
+    translation(state.ox, state.oy),
+    rotation(state.angle * (Math.PI / 180)),
+    scaling(state.sx, state.sy),
+    translation(-state.ox, -state.oy),
   );
   gl.uniformMatrix3fv(matrixLocation, false, matrix);
 
-  gl.drawArrays(gl.TRIANGLES, 0, positions.length / 2);
+  gl.drawArrays(gl.TRIANGLES, 0, positions.length / positionSize);
 }
 
 function transform(...ms: number[][]) {

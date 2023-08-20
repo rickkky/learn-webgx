@@ -18,7 +18,7 @@ const vao = gl.createVertexArray();
 gl.bindVertexArray(vao);
 
 const positionLocation = gl.getAttribLocation(program, 'a_position');
-gl.enableVertexAttribArray(positionLocation);
+const positionBuffer = gl.createBuffer();
 
 const resolutionLocation = gl.getUniformLocation(program, 'u_resolution');
 gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
@@ -30,8 +30,6 @@ for (let i = 0; i < 50; i++) {
   const y0 = Math.random() * gl.canvas.height;
   const x1 = Math.random() * gl.canvas.width;
   const y1 = Math.random() * gl.canvas.height;
-  const positionBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   // prettier-ignore
   const positions = [
     x0, y0,
@@ -41,8 +39,11 @@ for (let i = 0; i < 50; i++) {
     x1, y0,
     x1, y1,
   ];
+  const positionSize = 2;
+  gl.enableVertexAttribArray(positionLocation);
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(positionLocation, positionSize, gl.FLOAT, false, 0, 0);
   gl.uniform4f(colorLocation, Math.random(), Math.random(), Math.random(), 1);
-  gl.drawArrays(gl.TRIANGLES, 0, 6);
+  gl.drawArrays(gl.TRIANGLES, 0, positions.length / positionSize);
 }

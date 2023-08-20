@@ -70,6 +70,7 @@ export const positions = [
   100,  0,   20,
   100,  0,   0,
 ]
+export const positionSize = 3;
 
 export const colors = [
   // back

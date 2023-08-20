@@ -1,7 +1,13 @@
-import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
+import {
+  resizeCanavsToDisplaySize,
+  createProgram,
+  loadImage,
+} from '/common/helper';
 import vertexShaderSource from './vertex.glsl';
 import fragmentShaderSource from './fragment.glsl';
 import imageSource from '/asset/leaves.jpg';
+
+const image = await loadImage(imageSource);
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const gl = canvas.getContext('webgl2')!;
@@ -18,12 +24,8 @@ gl.useProgram(program);
 const vao = gl.createVertexArray();
 gl.bindVertexArray(vao);
 
-const image = await loadImage(imageSource);
-
 const positionLocation = gl.getAttribLocation(program, 'a_position');
-gl.enableVertexAttribArray(positionLocation);
 const positionBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 // prettier-ignore
 const positions = [
   0,           0,
@@ -33,13 +35,14 @@ const positions = [
   image.width, 0,
   image.width, image.height,
 ];
+const positionSize = 2;
+gl.enableVertexAttribArray(positionLocation);
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+gl.vertexAttribPointer(positionLocation, positionSize, gl.FLOAT, false, 0, 0);
 
 const texCoordLocation = gl.getAttribLocation(program, 'a_texCoord');
-gl.enableVertexAttribArray(texCoordLocation);
 const texCoordBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
 // prettier-ignore
 const texCoords = [
   0, 0,
@@ -49,6 +52,8 @@ const texCoords = [
   1, 0,
   1, 1,
 ];
+gl.enableVertexAttribArray(texCoordLocation);
+gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoords), gl.STATIC_DRAW);
 gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 
@@ -71,13 +76,4 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 
-gl.drawArrays(gl.TRIANGLES, 0, 6);
-
-function loadImage(imageSource: string) {
-  const image = new Image();
-  image.src = imageSource;
-  return new Promise<HTMLImageElement>((resolve, reject) => {
-    image.onload = () => resolve(image);
-    image.onerror = () => reject();
-  });
-}
+gl.drawArrays(gl.TRIANGLES, 0, positions.length / positionSize);

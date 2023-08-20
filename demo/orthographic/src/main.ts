@@ -13,9 +13,12 @@ const vao = gl.createVertexArray();
 
 const positionLocation = gl.getAttribLocation(program, 'a_position');
 const positionBuffer = gl.createBuffer();
+const positions = data.positions;
+const positionSize = data.positionSize;
 
 const colorLocation = gl.getAttribLocation(program, 'a_color');
 const colorBuffer = gl.createBuffer();
+const colors = data.colors;
 
 const matrixLocation = gl.getUniformLocation(program, 'u_matrix');
 
@@ -32,13 +35,11 @@ function render() {
 
   gl.bindVertexArray(vao);
 
-  const positions = data.positions;
   gl.enableVertexAttribArray(positionLocation);
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-  gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(positionLocation, positionSize, gl.FLOAT, false, 0, 0);
 
-  const colors = data.colors;
   gl.enableVertexAttribArray(colorLocation);
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(colors), gl.STATIC_DRAW);
@@ -67,7 +68,7 @@ function render() {
     gl.disable(gl.DEPTH_TEST);
   }
 
-  gl.drawArrays(gl.TRIANGLES, 0, positions.length / 3);
+  gl.drawArrays(gl.TRIANGLES, 0, positions.length / positionSize);
 }
 
 function transform(...ms: number[][]) {

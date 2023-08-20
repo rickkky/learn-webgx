@@ -18,9 +18,7 @@ const vao = gl.createVertexArray();
 gl.bindVertexArray(vao);
 
 const positionLocation = gl.getAttribLocation(program, 'a_position');
-gl.enableVertexAttribArray(positionLocation);
 const positionBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 // prettier-ignore
 const positions = [
   -0.6,  0.6,
@@ -30,13 +28,14 @@ const positions = [
    0.6,  0.6,
    0.6, -0.6,
 ];
+const positionSize = 2;
+gl.enableVertexAttribArray(positionLocation);
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+gl.vertexAttribPointer(positionLocation, positionSize, gl.FLOAT, false, 0, 0);
 
 const colorLocation = gl.getAttribLocation(program, 'a_color');
-gl.enableVertexAttribArray(colorLocation);
 const colorBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 const randomColor = () => [
   Math.random() * 256,
   Math.random() * 256,
@@ -51,7 +50,9 @@ const colors = [
   ...randomColor(),
   ...randomColor(),
 ];
+gl.enableVertexAttribArray(colorLocation);
+gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(colors), gl.STATIC_DRAW);
 gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
 
-gl.drawArrays(gl.TRIANGLES, 0, 6);
+gl.drawArrays(gl.TRIANGLES, 0, positions.length / positionSize);
