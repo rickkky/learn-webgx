@@ -1,4 +1,4 @@
-import { createStatehub } from '../../../common/ui/statehub';
+import { createStatehub } from '/common/ui/statehub';
 
 export const statehub = await createStatehub();
 

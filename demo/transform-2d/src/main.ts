@@ -1,14 +1,14 @@
 import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
-import vertexShaderSource from './vertex.glsl';
-import fragmentShaderSource from './fragment.glsl';
+import vertexShader from './vertex.glsl';
+import fragmentShader from './fragment.glsl';
 import { mat3 } from '/common/mat';
 import * as data from './data';
 import { statehub, state } from './state';
 
-const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
 const gl = canvas.getContext('webgl2')!;
 
-const program = createProgram(gl, vertexShaderSource, fragmentShaderSource);
+const program = createProgram(gl, vertexShader, fragmentShader);
 
 const vao = gl.createVertexArray();
 
@@ -22,7 +22,7 @@ const matrixLocation = gl.getUniformLocation(program, 'u_matrix');
 statehub.settle(render);
 
 function render() {
-  resizeCanavsToDisplaySize(gl.canvas as HTMLCanvasElement);
+  resizeCanavsToDisplaySize(canvas);
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
   gl.clearColor(0, 0, 0, 0);
