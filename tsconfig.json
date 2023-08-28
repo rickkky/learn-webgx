@@ -5,6 +5,7 @@
     "paths": {
       "/*": ["*"]
     },
+    "types": ["@webgpu/types", "vite-plugin-glsl/ext"],
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",
