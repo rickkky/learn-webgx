@@ -1,19 +1,16 @@
+import { requestDevice, observeResize } from '/common/helper';
 import shader from './shader.wgsl';
 
 const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
-const render = await createRender(canvas);
+const context = canvas.getContext('webgpu')!;
+const device = await requestDevice();
+const render = createRender(context, device);
 
-render();
+observeResize({ context, device, render });
 
-async function createRender(canvas: HTMLCanvasElement) {
-  const context = canvas.getContext('webgpu')!;
-  const adapter = await navigator.gpu.requestAdapter();
-  const device = await adapter!.requestDevice();
+function createRender(context: GPUCanvasContext, device: GPUDevice) {
   const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
-  context.configure({
-    device,
-    format: presentationFormat,
-  });
+  context.configure({ device, format: presentationFormat });
 
   const module = device.createShaderModule({
     label: 'shader module',
@@ -48,9 +45,11 @@ async function createRender(canvas: HTMLCanvasElement) {
         },
       ],
     });
+
     pass.setPipeline(pipeline);
     pass.draw(3);
     pass.end();
+
     const commandBuffer = encoder.finish();
     device.queue.submit([commandBuffer]);
   };
