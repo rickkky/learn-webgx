@@ -1,13 +1,13 @@
+import { requestDevice } from '/common/helper';
 import shader from './shader.wgsl';
 
-const compute = await createCompute();
+const device = await requestDevice();
+const compute = createCompute(device);
 
 compute([1, 2, 3]);
+(window as any).compute = compute;
 
-async function createCompute() {
-  const adapter = await navigator.gpu.requestAdapter();
-  const device = await adapter!.requestDevice();
-
+function createCompute(device: GPUDevice) {
   const module = device.createShaderModule({
     label: 'shader module',
     code: shader,
@@ -31,11 +31,8 @@ async function createCompute() {
         GPUBufferUsage.COPY_SRC |
         GPUBufferUsage.COPY_DST,
     });
-    const resultBuffer = device.createBuffer({
-      label: 'result buffer',
-      size: input.byteLength,
-      usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST,
-    });
+    device.queue.writeBuffer(workBuffer, 0, input);
+
     const bindGroup = device.createBindGroup({
       label: 'bind group',
       layout: pipeline.getBindGroupLayout(0),
@@ -55,11 +52,16 @@ async function createCompute() {
       label: 'compute pass',
     });
 
-    device.queue.writeBuffer(workBuffer, 0, input);
     pass.setPipeline(pipeline);
     pass.setBindGroup(0, bindGroup);
     pass.dispatchWorkgroups(input.length);
     pass.end();
+
+    const resultBuffer = device.createBuffer({
+      label: 'result buffer',
+      size: input.byteLength,
+      usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST,
+    });
     encoder.copyBufferToBuffer(
       workBuffer,
       0,
