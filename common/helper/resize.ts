@@ -28,10 +28,16 @@ export function observeResize({
   const observer = new ResizeObserver((entries) => {
     const entry = entries[0];
     const size = entry.contentBoxSize[0];
-    const w = Math.floor(size.inlineSize * multiplier);
-    const h = Math.floor(size.blockSize * multiplier);
-    const width = Math.max(1, Math.min(w, limit));
-    const height = Math.max(1, Math.min(h, limit));
+    const width = Math.max(
+      1,
+      Math.min(Math.floor(size.inlineSize * multiplier), limit),
+    );
+    const height = Math.max(
+      1,
+      Math.min(Math.floor(size.blockSize * multiplier), limit),
+    );
+    canvas.width = width;
+    canvas.height = height;
     if (WebGL2RenderingContext && context instanceof WebGL2RenderingContext) {
       context.viewport(0, 0, width, height);
     }
