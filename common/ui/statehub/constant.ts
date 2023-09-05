@@ -1,14 +1,9 @@
-import type { InjectionKey } from 'vue';
-import { StatehubExposed } from './index';
-import ActionRecorder from './actioner.vue';
-import Checkbox from './checkbox.vue';
-import Slider from './slider.vue';
-
-export const IK_PREPARE: InjectionKey<(exposed: StatehubExposed) => void> =
-  Symbol('prepare');
+import Checkbox from '/common/ui/component/checkbox.vue';
+import Slider from '/common/ui/component/slider.vue';
+import Actioner from '/common/ui/component/actioner.vue';
 
 export const WIDGET_MAP = {
-  slider: Slider,
   checkbox: Checkbox,
-  actioner: ActionRecorder,
+  slider: Slider,
+  actioner: Actioner,
 };

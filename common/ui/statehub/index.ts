@@ -1,36 +1,26 @@
-import { createApp, type Ref } from 'vue';
-import { WIDGET_MAP, IK_PREPARE } from './constant';
-import Statehub from './statehub.vue';
+import { createApp } from 'vue';
+import StatehubAgent from './statehub-agent.vue';
+import { StatehubAgentExposed } from './type';
+import { createDefer } from '/common/helper';
 
-export type WidgetMap = {
-  [key in keyof typeof WIDGET_MAP]: (typeof WIDGET_MAP)[key];
-};
+const agent = await createAgent();
 
-export interface WidgetPayload<K extends string, T extends keyof WidgetMap> {
-  label: K;
-  type: T;
-  props: Omit<InstanceType<WidgetMap[T]>['$props'], 'modelValue'>;
-  default: InstanceType<WidgetMap[T]>['$props']['modelValue'];
-}
+export const createStatehub = agent.createStatehub;
 
-export type WidgetPayloadList = WidgetPayload<string, keyof WidgetMap>[];
-
-export type StatehubExposed = {
-  setup: <T extends keyof WidgetMap>(
-    payload: WidgetPayload<string, T>,
-  ) => Ref<WidgetPayload<string, T>['default']>;
-  settle: (execute?: () => void) => void;
-};
-
-export function createStatehub() {
-  return new Promise<StatehubExposed>((resolve) => {
-    const element = document.createElement('div');
-    element.id = 'statehub';
-    document.body.appendChild(element);
-    const app = createApp(Statehub);
-    app.provide(IK_PREPARE, (exposed) => {
-      resolve(exposed);
-    });
-    app.mount(element);
+function createAgent() {
+  const defer = createDefer<StatehubAgentExposed>();
+  const element = document.createElement('div');
+  document.body.appendChild(element);
+  const app = createApp(StatehubAgent, {
+    prepare: (c: any) => {
+      const exposed = {
+        createStatehub: (props: any) => {
+          return c(props);
+        },
+      };
+      defer.resolve(exposed);
+    },
   });
+  app.mount(element);
+  return defer.promise;
 }
