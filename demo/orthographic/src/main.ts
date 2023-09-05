@@ -1,9 +1,9 @@
-import { resizeCanavsToDisplaySize, createProgram } from '/common/helper';
+import { observeResize, createProgram } from '/common/helper';
 import fragmentShader from './fragment.glsl';
 import vertexShader from './vertex.glsl';
 import { mat4 } from '/common/mat';
 import * as data from './data';
-import { statehub, state } from './state';
+import { States, statehub } from './state';
 
 const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
 const gl = canvas.getContext('webgl2')!;
@@ -23,10 +23,10 @@ const colors = data.colors;
 
 const matrixLocation = gl.getUniformLocation(program, 'u_matrix');
 
-statehub.settle(render);
+statehub.observe(render);
+observeResize({ context: gl, render });
 
-function render() {
-  resizeCanavsToDisplaySize(canvas);
+function render(states: States = statehub.states) {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
   gl.clearColor(0, 0, 0, 0);
@@ -48,22 +48,22 @@ function render() {
 
   const matrix = mat4.combine(
     mat4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -400, 400),
-    mat4.translation(state.tx, state.ty, state.tz),
-    mat4.translation(state.ox, state.oy, state.oz),
-    mat4.rotationZ(state.rz * (Math.PI / 180)),
-    mat4.rotationY(state.ry * (Math.PI / 180)),
-    mat4.rotationX(state.rx * (Math.PI / 180)),
-    mat4.scaling(state.sx, state.sy, state.sz),
-    mat4.translation(-state.ox, -state.oy, -state.oz),
+    mat4.translation(states.tx, states.ty, states.tz),
+    mat4.translation(states.ox, states.oy, states.oz),
+    mat4.rotationZ(states.rz * (Math.PI / 180)),
+    mat4.rotationY(states.ry * (Math.PI / 180)),
+    mat4.rotationX(states.rx * (Math.PI / 180)),
+    mat4.scaling(states.sx, states.sy, states.sz),
+    mat4.translation(-states.ox, -states.oy, -states.oz),
   );
   gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
-  if (state.enableCullFace) {
+  if (states.enableCullFace) {
     gl.enable(gl.CULL_FACE);
   } else {
     gl.disable(gl.CULL_FACE);
   }
-  if (state.enableDepthTest) {
+  if (states.enableDepthTest) {
     gl.enable(gl.DEPTH_TEST);
   } else {
     gl.disable(gl.DEPTH_TEST);

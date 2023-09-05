@@ -1,7 +1,5 @@
 import { createStatehub } from '/common/ui/statehub';
 
-export const statehub = await createStatehub();
-
 // prettier-ignore
 export const kernels: Record<string, number[]> = {
   normal: [
@@ -106,17 +104,21 @@ export const kernels: Record<string, number[]> = {
   ],
 };
 
-export const effects = statehub.setup({
-  label: 'Effects',
-  type: 'actioner',
-  props: {
-    actions: Object.keys(kernels),
-  },
-  default: [],
-});
+export interface States {
+  effects: string[];
+}
 
-export const state = {
-  get effects() {
-    return effects.value;
-  },
-};
+export const statehub = await createStatehub<States>({
+  name: 'Render',
+  payloads: [
+    {
+      key: 'effects',
+      label: 'Effects',
+      type: 'actioner',
+      props: {
+        actions: Object.keys(kernels),
+      },
+      default: [],
+    },
+  ],
+});

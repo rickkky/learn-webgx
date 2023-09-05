@@ -1,11 +1,7 @@
-import {
-  resizeCanavsToDisplaySize,
-  createProgram,
-  loadImage,
-} from '/common/helper';
+import { loadImage, observeResize, createProgram } from '/common/helper';
 import vertexShader from './vertex.glsl';
 import fragmentShader from './fragment.glsl';
-import { statehub, state, kernels } from './state';
+import { kernels, States, statehub } from './state';
 import imageSource from '/asset/leaves.jpg';
 
 const image = await loadImage(imageSource);
@@ -96,16 +92,19 @@ for (let i = 0; i < 2; i++) {
 const kernelLocation = gl.getUniformLocation(program, 'u_kernel[0]');
 const kernelWeightLocation = gl.getUniformLocation(program, 'u_kernelWeight');
 
-statehub.settle(render);
+statehub.observe(render);
+observeResize({
+  context: gl,
+  render: () => render(statehub.states),
+});
 
-function render() {
-  resizeCanavsToDisplaySize(canvas);
+function render(states: States) {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
   gl.clearColor(0, 0, 0, 0);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
-  drawEffects(state.effects);
+  drawEffects(states.effects);
 }
 
 function createAndSetupTexture() {
