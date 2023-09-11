@@ -10,25 +10,30 @@ observeResize({ context: gl, render });
 
 function createRender(gl: WebGL2RenderingContext) {
   const program = createProgram(gl, vertexShader, fragmentShader);
-  gl.useProgram(program);
+
+  const vao = gl.createVertexArray();
+
+  const positionLocation = gl.getAttribLocation(program, 'a_position');
+  const positionBuffer = gl.createBuffer();
+  const positionSize = 2;
+
+  const resolutionLocation = gl.getUniformLocation(program, 'u_resolution');
 
   return () => {
-    gl.clearColor(0, 0, 0, 0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.useProgram(program);
 
-    const vao = gl.createVertexArray();
     // Calls to `bindBuffer` or `vertexAttribPointer` will be "recorded" in the VAO.
     gl.bindVertexArray(vao);
 
-    const positionLocation = gl.getAttribLocation(program, 'a_position');
-    const positionBuffer = gl.createBuffer();
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
     // prettier-ignore
     const positions = [
-      0, 0,
-      0, 0.5,
-      1, 0,
+      0.5  * gl.canvas.width, 0.25 * gl.canvas.height,
+      0.25 * gl.canvas.width, 0.75 * gl.canvas.height,
+      0.75 * gl.canvas.width, 0.75 * gl.canvas.height,
     ];
-    const positionSize = 2;
     gl.enableVertexAttribArray(positionLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
@@ -41,6 +46,8 @@ function createRender(gl: WebGL2RenderingContext) {
       0,
       0,
     );
+
+    gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
 
     gl.drawArrays(gl.TRIANGLES, 0, positions.length / positionSize);
   };

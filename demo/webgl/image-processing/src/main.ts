@@ -1,7 +1,8 @@
 import { loadImage, observeResize, createProgram } from '/common/helper';
 import vertexShader from './vertex.glsl';
 import fragmentShader from './fragment.glsl';
-import { kernels, States, statehub } from './state';
+import { kernels, statehub } from './state';
+import type { States } from './state';
 import imageSource from '/asset/leaves.jpg';
 
 const image = await loadImage(imageSource);
@@ -93,12 +94,9 @@ const kernelLocation = gl.getUniformLocation(program, 'u_kernel[0]');
 const kernelWeightLocation = gl.getUniformLocation(program, 'u_kernelWeight');
 
 statehub.observe(render);
-observeResize({
-  context: gl,
-  render: () => render(statehub.states),
-});
+observeResize({ context: gl, render });
 
-function render(states: States) {
+function render(states: States = statehub.states) {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
   gl.clearColor(0, 0, 0, 0);

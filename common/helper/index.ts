@@ -24,3 +24,7 @@ export function createDefer<T>() {
     reject: reject!,
   };
 }
+
+export function degreeToRadian(degree: number) {
+  return (degree * Math.PI) / 180;
+}
