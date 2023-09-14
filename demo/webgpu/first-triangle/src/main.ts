@@ -4,7 +4,7 @@ import shader from './shader.wgsl';
 const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
 const context = canvas.getContext('webgpu')!;
 const device = await requestDevice();
-const render = createRender(context, device);
+let render = createRender(context, device);
 
 observeResize({ context, device, render });
 
@@ -30,7 +30,7 @@ function createRender(context: GPUCanvasContext, device: GPUDevice) {
     },
   });
 
-  return () => {
+  const render = () => {
     const encoder = device.createCommandEncoder({
       label: 'encoder',
     });
@@ -53,4 +53,6 @@ function createRender(context: GPUCanvasContext, device: GPUDevice) {
     const commandBuffer = encoder.finish();
     device.queue.submit([commandBuffer]);
   };
+
+  return render;
 }

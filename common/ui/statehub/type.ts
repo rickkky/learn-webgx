@@ -33,6 +33,7 @@ export interface StatehubProps {
   name: string;
   payloads: (
     | StatePayload<'checkbox'>
+    | StatePayload<'select'>
     | StatePayload<'slider'>
     | StatePayload<'actioner'>
   )[];

@@ -28,3 +28,7 @@ export function createDefer<T>() {
 export function degreeToRadian(degree: number) {
   return (degree * Math.PI) / 180;
 }
+
+export function randomColor() {
+  return [Math.random() * 256, Math.random() * 256, Math.random() * 256, 255];
+}
