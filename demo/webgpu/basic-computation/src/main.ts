@@ -21,7 +21,7 @@ function createCompute(device: GPUDevice) {
     },
   });
 
-  return async (data: number[]) => {
+  const compute = async (data: number[]) => {
     const input = new Float32Array(data);
     const workBuffer = device.createBuffer({
       label: 'work buffer',
@@ -45,6 +45,7 @@ function createCompute(device: GPUDevice) {
         },
       ],
     });
+
     const encoder = device.createCommandEncoder({
       label: 'encoder',
     });
@@ -79,4 +80,6 @@ function createCompute(device: GPUDevice) {
     console.log('result', result.toString());
     resultBuffer.unmap();
   };
+
+  return compute;
 }
