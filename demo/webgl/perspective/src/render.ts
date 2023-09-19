@@ -3,7 +3,7 @@ import fragmentShader from './fragment.glsl';
 import vertexShader from './vertex.glsl';
 import { mat4 } from '/common/mat';
 import { statehub } from './state';
-import type { States } from './state';
+import type { State } from './state';
 import * as data from './data';
 
 export function createRender(gl: WebGL2RenderingContext) {
@@ -22,7 +22,7 @@ export function createRender(gl: WebGL2RenderingContext) {
 
   const matrixLocation = gl.getUniformLocation(program, 'u_matrix');
 
-  const render = (states: States = statehub.states) => {
+  const render = (state: State = statehub.state) => {
     gl.useProgram(program);
 
     gl.bindVertexArray(vao);
@@ -49,27 +49,27 @@ export function createRender(gl: WebGL2RenderingContext) {
 
     const matrix = mat4.combine(
       mat4.perspective(
-        degreeToRadian(states.fov),
+        degreeToRadian(state.fov),
         gl.canvas.width / gl.canvas.height,
         1,
         2000,
       ),
-      mat4.translation(states.tx, states.ty, states.tz),
-      mat4.translation(states.ox, states.oy, states.oz),
-      mat4.rotationZ(degreeToRadian(states.rz)),
-      mat4.rotationY(degreeToRadian(states.ry)),
-      mat4.rotationX(degreeToRadian(states.rx)),
-      mat4.scaling(states.sx, states.sy, states.sz),
-      mat4.translation(-states.ox, -states.oy, -states.oz),
+      mat4.translation(state.tx, state.ty, state.tz),
+      mat4.translation(state.ox, state.oy, state.oz),
+      mat4.rotationZ(degreeToRadian(state.rz)),
+      mat4.rotationY(degreeToRadian(state.ry)),
+      mat4.rotationX(degreeToRadian(state.rx)),
+      mat4.scaling(state.sx, state.sy, state.sz),
+      mat4.translation(-state.ox, -state.oy, -state.oz),
     );
     gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
-    if (states.enableCullFace) {
+    if (state.enableCullFace) {
       gl.enable(gl.CULL_FACE);
     } else {
       gl.disable(gl.CULL_FACE);
     }
-    if (states.enableDepthTest) {
+    if (state.enableDepthTest) {
       gl.enable(gl.DEPTH_TEST);
     } else {
       gl.disable(gl.DEPTH_TEST);

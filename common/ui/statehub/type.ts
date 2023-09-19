@@ -26,7 +26,7 @@ export interface StatePayload<T extends WidgetMapKeys> {
 
 export interface StatehubExposed<S> {
   observe: (callback: (state: S) => void) => void;
-  states: S;
+  state: S;
 }
 
 export interface StatehubProps {
@@ -42,6 +42,6 @@ export interface StatehubProps {
 export type StatehubAgentExposed = {
   createStatehub<S>(props: StatehubProps): {
     observe: (callback: (state: S) => void) => void;
-    states: S;
+    state: S;
   };
 };

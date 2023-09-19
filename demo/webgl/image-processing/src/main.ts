@@ -2,7 +2,7 @@ import { loadImage, observeResize, createProgram } from '/common/helper';
 import vertexShader from './vertex.glsl';
 import fragmentShader from './fragment.glsl';
 import { kernels, statehub } from './state';
-import type { States } from './state';
+import type { State } from './state';
 import imageSource from '/asset/leaves.jpg';
 
 const image = await loadImage(imageSource);
@@ -96,13 +96,13 @@ const kernelWeightLocation = gl.getUniformLocation(program, 'u_kernelWeight');
 statehub.observe(render);
 observeResize({ context: gl, render });
 
-function render(states: States = statehub.states) {
+function render(state: State = statehub.state) {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
   gl.clearColor(0, 0, 0, 0);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
-  drawEffects(states.effects);
+  drawEffects(state.effects);
 }
 
 function createAndSetupTexture() {

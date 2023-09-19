@@ -104,11 +104,11 @@ export const kernels: Record<string, number[]> = {
   ],
 };
 
-export interface States {
+export interface State {
   effects: string[];
 }
 
-export const statehub = await createStatehub<States>({
+export const statehub = await createStatehub<State>({
   name: 'Render',
   payloads: [
     {

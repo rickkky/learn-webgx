@@ -3,7 +3,7 @@ import { mat3 } from '/common/mat';
 import vertexShader from './vertex.glsl';
 import fragmentShader from './fragment.glsl';
 import { statehub } from './state';
-import type { States } from './state';
+import type { State } from './state';
 import * as data from './data';
 
 export function createRender(gl: WebGL2RenderingContext) {
@@ -18,7 +18,7 @@ export function createRender(gl: WebGL2RenderingContext) {
 
   const matrixLocation = gl.getUniformLocation(program, 'u_matrix');
 
-  const render = (states: States = statehub.states) => {
+  const render = (state: State = statehub.state) => {
     gl.useProgram(program);
 
     gl.bindVertexArray(vao);
@@ -40,11 +40,11 @@ export function createRender(gl: WebGL2RenderingContext) {
 
     const matrix = mat3.combine(
       mat3.projection(gl.canvas.width, gl.canvas.height),
-      mat3.translation(states.tx, states.ty),
-      mat3.translation(states.ox, states.oy),
-      mat3.rotation(degreeToRadian(states.angle)),
-      mat3.scaling(states.sx, states.sy),
-      mat3.translation(-states.ox, -states.oy),
+      mat3.translation(state.tx, state.ty),
+      mat3.translation(state.ox, state.oy),
+      mat3.rotation(degreeToRadian(state.angle)),
+      mat3.scaling(state.sx, state.sy),
+      mat3.translation(-state.ox, -state.oy),
     );
     gl.uniformMatrix3fv(matrixLocation, false, matrix);
 

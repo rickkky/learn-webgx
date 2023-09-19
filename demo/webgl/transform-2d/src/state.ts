@@ -1,6 +1,6 @@
 import { createStatehub } from '/common/ui/statehub';
 
-export interface States {
+export interface State {
   ox: number;
   oy: number;
   sx: number;
@@ -10,7 +10,7 @@ export interface States {
   ty: number;
 }
 
-export const statehub = createStatehub<States>({
+export const statehub = createStatehub<State>({
   name: 'Render',
   payloads: [
     {

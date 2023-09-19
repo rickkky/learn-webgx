@@ -8,22 +8,22 @@ const props = defineProps<{
 }>();
 
 const propsList: StatehubProps[] = reactive([]);
-const statesList: any[] = reactive([]);
+const stateList: any[] = reactive([]);
 
 function createStatehub<S>(props: StatehubProps) {
-  const states: any = {};
+  const state: any = {};
   for (const payload of props.payloads) {
-    states[payload.key] = payload.default;
+    state[payload.key] = payload.default;
   }
   const i = propsList.length;
   propsList.push(props);
-  statesList.push(states);
+  stateList.push(state);
   return {
-    observe: (callback: (states: S) => void) => {
-      watch(() => statesList[i], callback);
+    observe: (callback: (state: S) => void) => {
+      watch(() => stateList[i], callback);
     },
-    get states() {
-      return statesList[i] as S;
+    get state() {
+      return stateList[i] as S;
     },
   };
 }
@@ -39,8 +39,8 @@ onMounted(() => {
       v-for="(props, i) of propsList"
       :key="i"
       v-bind="props"
-      :states="statesList[i]"
-      @update:states="statesList[i] = $event"
+      :state="stateList[i]"
+      @update:state="stateList[i] = $event"
     />
   </div>
 </template>

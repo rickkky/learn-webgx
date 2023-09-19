@@ -4,12 +4,12 @@ import { WidgetMapKeys, WidgetPayload } from './type';
 
 defineProps<{
   name: string;
-  states: S;
+  state: S;
   payloads: WidgetPayload<string, WidgetMapKeys>[];
 }>();
 
 const emit = defineEmits<{
-  (e: 'update:states', value: S): void;
+  (e: 'update:state', value: S): void;
 }>();
 </script>
 
@@ -25,10 +25,10 @@ const emit = defineEmits<{
       <component
         :is="(WIDGET_MAP[payload.type] as any)"
         v-bind="payload.props"
-        :modelValue="(states as any)[payload.key]"
+        :modelValue="(state as any)[payload.key]"
         @update:modelValue="
-          emit('update:states', {
-            ...(states as any),
+          emit('update:state', {
+            ...(state as any),
             [payload.key]: $event,
           })
         "
