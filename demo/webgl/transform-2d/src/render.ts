@@ -1,5 +1,7 @@
+import { mat3 } from 'g-matrix';
 import { createProgram, degreeToRadian } from '/common/helper';
-import { mat3 } from '/common/mat';
+import { projection } from '/common/transform/webgl/projection-2d';
+import { translation, rotation, scaling } from '/common/transform/transform-2d';
 import vertexShader from './vertex.glsl';
 import fragmentShader from './fragment.glsl';
 import { statehub } from './state';
@@ -38,15 +40,15 @@ export function createRender(gl: WebGL2RenderingContext) {
       0,
     );
 
-    const matrix = mat3.combine(
-      mat3.projection(gl.canvas.width, gl.canvas.height),
-      mat3.translation(state.tx, state.ty),
-      mat3.translation(state.ox, state.oy),
-      mat3.rotation(degreeToRadian(state.angle)),
-      mat3.scaling(state.sx, state.sy),
-      mat3.translation(-state.ox, -state.oy),
+    const matrix = mat3.multiplication(
+      projection(gl.canvas.width, gl.canvas.height),
+      translation(state.tx, state.ty),
+      translation(state.ox, state.oy),
+      rotation(degreeToRadian(state.angle)),
+      scaling(state.sx, state.sy),
+      translation(-state.ox, -state.oy),
     );
-    gl.uniformMatrix3fv(matrixLocation, false, matrix);
+    gl.uniformMatrix3fv(matrixLocation, false, matrix.toArray());
 
     gl.drawArrays(gl.TRIANGLES, 0, positions.length / positionSize);
   };

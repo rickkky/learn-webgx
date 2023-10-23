@@ -32,3 +32,9 @@ export function degreeToRadian(degree: number) {
 export function randomColor() {
   return [Math.random() * 256, Math.random() * 256, Math.random() * 256, 255];
 }
+
+export function randomColors(count: number, size = 3) {
+  return Array(count * size)
+    .fill(randomColor())
+    .flat();
+}

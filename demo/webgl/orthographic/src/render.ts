@@ -1,7 +1,9 @@
+import { mat4 } from 'g-matrix';
 import { createProgram, degreeToRadian } from '/common/helper';
+import { orthographic } from '/common/transform/webgl/orthographic';
+import { translation, rotation, scaling } from '/common/transform/transform-3d';
 import fragmentShader from './fragment.glsl';
 import vertexShader from './vertex.glsl';
-import { mat4 } from '/common/mat';
 import { statehub } from './state';
 import type { State } from './state';
 import * as data from './data';
@@ -45,19 +47,21 @@ export function createRender(gl: WebGL2RenderingContext) {
     gl.enableVertexAttribArray(colorLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(colors), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(colorLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
+    gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
 
-    const matrix = mat4.combine(
-      mat4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -400, 400),
-      mat4.translation(state.tx, state.ty, state.tz),
-      mat4.translation(state.ox, state.oy, state.oz),
-      mat4.rotationZ(degreeToRadian(state.rz)),
-      mat4.rotationY(degreeToRadian(state.ry)),
-      mat4.rotationX(degreeToRadian(state.rx)),
-      mat4.scaling(state.sx, state.sy, state.sz),
-      mat4.translation(-state.ox, -state.oy, -state.oz),
+    const matrix = mat4.multiplication(
+      orthographic(0, gl.canvas.width, 0, gl.canvas.height, -400, 400),
+      translation(state.tx, state.ty, state.tz),
+      translation(state.ox, state.oy, state.oz),
+      rotation(
+        degreeToRadian(state.rx),
+        degreeToRadian(state.ry),
+        degreeToRadian(state.rz),
+      ),
+      scaling(state.sx, state.sy, state.sz),
+      translation(-state.ox, -state.oy, -state.oz),
     );
-    gl.uniformMatrix4fv(matrixLocation, false, matrix);
+    gl.uniformMatrix4fv(matrixLocation, false, matrix.toArray());
 
     if (state.enableCullFace) {
       gl.enable(gl.CULL_FACE);
