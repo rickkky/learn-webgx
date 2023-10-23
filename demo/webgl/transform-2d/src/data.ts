@@ -12,4 +12,5 @@ export const positions = [
   70,  -20,
   100,  0,
 ];
+
 export const positionSize = 2;
