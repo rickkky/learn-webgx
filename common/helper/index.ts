@@ -33,8 +33,8 @@ export function randomColor() {
   return [Math.random() * 256, Math.random() * 256, Math.random() * 256, 255];
 }
 
-export function randomColors(count: number, size = 3) {
-  return Array(count * size)
-    .fill(randomColor())
+export function repeatTriangleColors(count: number, color = randomColor()) {
+  return Array(count * 3)
+    .fill(color)
     .flat();
 }

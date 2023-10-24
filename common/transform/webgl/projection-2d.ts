@@ -1,4 +1,4 @@
-import { mat3 } from 'g-matrix';
+import { mat3 } from 'glas';
 
 export function projection(width: number, height: number) {
   const sx = 2 / width;

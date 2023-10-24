@@ -1,4 +1,4 @@
-import { mat3 } from 'g-matrix';
+import { mat3 } from 'glas';
 
 export function translation(tx: number, ty: number) {
   // prettier-ignore

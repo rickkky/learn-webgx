@@ -1,4 +1,4 @@
-import { mat4 } from 'g-matrix';
+import { mat4 } from 'glas';
 
 /**
  * We assume that the model coordinate system is right-handed, with

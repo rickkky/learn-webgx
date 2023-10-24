@@ -1,4 +1,4 @@
-import { mat4 } from 'g-matrix';
+import { mat4 } from 'glas';
 import { createProgram, degreeToRadian } from '/common/helper';
 import { orthographic } from '/common/transform/webgl/orthographic';
 import { translation, rotation, scaling } from '/common/transform/transform-3d';
