@@ -6,7 +6,7 @@ import fragmentShader from './fragment.glsl';
 import vertexShader from './vertex.glsl';
 import { statehub } from './state';
 import type { State } from './state';
-import * as data from './data';
+import data from './data';
 
 export function createRender(gl: WebGL2RenderingContext) {
   const program = createProgram(gl, vertexShader, fragmentShader);

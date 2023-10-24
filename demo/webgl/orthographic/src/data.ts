@@ -1,80 +1,11 @@
-import { repeatTriangleColors } from '/common/helper';
+import { createCuboid } from '/common/data';
 
-// prettier-ignore
-export const positions = [
-  // back
-   80, -60, -100,
-  -80, -60, -100,
-  -80,  60, -100,
+const cuboidx = createCuboid(30, 100, 0, 25, 0, 25);
+const cuboidy = createCuboid(0, 25, 30, 150, 0, 25);
+const cuboidz = createCuboid(0, 25, 0, 25, 30, 200);
 
-  -80,  60, -100,
-   80,  60, -100,
-   80, -60, -100,
-
-  // front
-  -40,  30, -10,
-  -40, -30, -10,
-   40, -30, -10,
-
-   40, -30, -10,
-   40,  30, -10,
-  -40,  30, -10,
-
-  // left
-  -40,  30, -10,
-  -80,  60, -100,
-  -80, -60, -100,
-
-  -80, -60, -100,
-  -40, -30, -10,
-  -40,  30, -10,
-
-  // right
-  80, -60, -100,
-  80,  60, -100,
-  40,  30, -10,
-
-  40,  30, -10,
-  40, -30, -10,
-  80, -60, -100,
-
-  // top
-   40, 30, -10,
-   80, 60, -100,
-  -80, 60, -100,
-
-  -80, 60, -100,
-  -40, 30, -10,
-   40, 30, -10,
-
-  // bottom
-  -80, -60, -100,
-   80, -60, -100,
-   40, -30, -10,
-
-   40, -30, -10,
-  -40, -30, -10,
-  -80, -60, -100,
-];
-
-export const positionSize = 3;
-
-export const colors = [
-  // back
-  ...repeatTriangleColors(2),
-
-  // front
-  ...repeatTriangleColors(2),
-
-  // left
-  ...repeatTriangleColors(2),
-
-  // right
-  ...repeatTriangleColors(2),
-
-  // top
-  ...repeatTriangleColors(2),
-
-  // bottom
-  ...repeatTriangleColors(2),
-];
+export default {
+  positions: [...cuboidx.positions, ...cuboidy.positions, ...cuboidz.positions],
+  positionSize: cuboidx.positionSize,
+  colors: [...cuboidx.colors, ...cuboidy.colors, ...cuboidz.colors],
+};
