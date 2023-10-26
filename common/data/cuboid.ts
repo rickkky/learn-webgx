@@ -1,4 +1,4 @@
-import { repeatTriangleColors } from '/common/helper';
+import { repeatColor } from '/common/helper';
 
 export const createCuboid = (
   left: number,
@@ -64,23 +64,27 @@ export const createCuboid = (
     right, bottom, back,
     right, top,    back,
   ];
+  return positions;
+};
+
+createCuboid.positionSize = 3;
+
+export const createCuboidColors = (countPerInstance: number) => {
   const colors = [
     // front
-    ...repeatTriangleColors(2),
+    ...repeatColor(2 * countPerInstance),
     // back
-    ...repeatTriangleColors(2),
+    ...repeatColor(2 * countPerInstance),
     // top
-    ...repeatTriangleColors(2),
+    ...repeatColor(2 * countPerInstance),
     // bottom
-    ...repeatTriangleColors(2),
+    ...repeatColor(2 * countPerInstance),
     // left
-    ...repeatTriangleColors(2),
+    ...repeatColor(2 * countPerInstance),
     // right
-    ...repeatTriangleColors(2),
+    ...repeatColor(2 * countPerInstance),
   ];
-  return {
-    positions,
-    positionSize: 3,
-    colors,
-  };
+  return colors;
 };
+
+createCuboidColors.colorSize = 4;

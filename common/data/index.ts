@@ -1,1 +1,2 @@
-export { createCuboid } from './cuboid';
+export * from './triangle';
+export * from './cuboid';

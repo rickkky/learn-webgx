@@ -1,11 +1,16 @@
-import { createCuboid } from '/common/data';
-
-const cuboidx = createCuboid(30, 100, 0, 25, 0, 25);
-const cuboidy = createCuboid(0, 25, 30, 150, 0, 25);
-const cuboidz = createCuboid(0, 25, 0, 25, 30, 200);
+import { createCuboid, createCuboidColors } from '/common/data';
 
 export default {
-  positions: [...cuboidx.positions, ...cuboidy.positions, ...cuboidz.positions],
-  positionSize: cuboidx.positionSize,
-  colors: [...cuboidx.colors, ...cuboidy.colors, ...cuboidz.colors],
+  positions: [
+    ...createCuboid(40, 100, 0, 35, 0, 35),
+    ...createCuboid(0, 35, 40, 150, 0, 35),
+    ...createCuboid(0, 35, 0, 35, 40, 200),
+  ],
+  positionSize: createCuboid.positionSize,
+  colors: [
+    ...createCuboidColors(3),
+    ...createCuboidColors(3),
+    ...createCuboidColors(3),
+  ],
+  colorSize: createCuboidColors.colorSize,
 };

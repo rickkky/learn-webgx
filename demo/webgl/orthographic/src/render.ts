@@ -21,6 +21,7 @@ export function createRender(gl: WebGL2RenderingContext) {
   const colorLocation = gl.getAttribLocation(program, 'a_color');
   const colorBuffer = gl.createBuffer();
   const colors = data.colors;
+  const colorSize = data.colorSize;
 
   const matrixLocation = gl.getUniformLocation(program, 'u_matrix');
 
@@ -47,7 +48,14 @@ export function createRender(gl: WebGL2RenderingContext) {
     gl.enableVertexAttribArray(colorLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(colors), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
+    gl.vertexAttribPointer(
+      colorLocation,
+      colorSize,
+      gl.UNSIGNED_BYTE,
+      true,
+      0,
+      0,
+    );
 
     const matrix = mat4.multiplication(
       orthographic(0, gl.canvas.width, 0, gl.canvas.height, -400, 400),
