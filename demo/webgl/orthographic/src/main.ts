@@ -7,4 +7,4 @@ const gl = canvas.getContext('webgl2')!;
 const render = createRender(gl);
 
 statehub.observe(render);
-observeResize({ context: gl, render });
+observeResize({ context: gl, callbacks: [render] });

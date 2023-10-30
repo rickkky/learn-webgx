@@ -15,12 +15,12 @@ export function resizeCanavsToDisplaySize(
 export function observeResize({
   context,
   device,
-  render,
+  callbacks,
   multiplier = 1,
 }: {
   context: WebGL2RenderingContext | GPUCanvasContext;
   device?: GPUDevice;
-  render?: () => void;
+  callbacks: (() => void)[];
   multiplier?: number;
 }) {
   const canvas = context.canvas as HTMLCanvasElement;
@@ -41,8 +41,8 @@ export function observeResize({
     if (WebGL2RenderingContext && context instanceof WebGL2RenderingContext) {
       context.viewport(0, 0, width, height);
     }
-    if (render) {
-      render();
+    for (const callback of callbacks) {
+      callback();
     }
   });
   observer.observe(canvas);

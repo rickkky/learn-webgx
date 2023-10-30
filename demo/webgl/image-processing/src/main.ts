@@ -94,7 +94,7 @@ const kernelLocation = gl.getUniformLocation(program, 'u_kernel[0]');
 const kernelWeightLocation = gl.getUniformLocation(program, 'u_kernelWeight');
 
 statehub.observe(render);
-observeResize({ context: gl, render });
+observeResize({ context: gl, callbacks: [render] });
 
 function render(state: State = statehub.state) {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
