@@ -5,4 +5,4 @@ const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
 const gl = canvas.getContext('webgl2')!;
 const render = createRender(gl);
 
-observeResize({ context: gl, render });
+observeResize({ context: gl, callbacks: [render.updateData, render] });

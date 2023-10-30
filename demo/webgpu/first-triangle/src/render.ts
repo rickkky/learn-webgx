@@ -1,4 +1,5 @@
 import shader from './shader.wgsl';
+import data from './data';
 
 export function createRender(context: GPUCanvasContext, device: GPUDevice) {
   const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
@@ -20,6 +21,18 @@ export function createRender(context: GPUCanvasContext, device: GPUDevice) {
       entryPoint: 'fs',
       targets: [{ format: presentationFormat }],
     },
+  });
+
+  const vertexData = new Float32Array(data.positions);
+  const vertexBuffer = device.createBuffer({
+    label: 'vertex buffer',
+    size: vertexData.byteLength,
+    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+  });
+  device.queue.writeBuffer(vertexBuffer, 0, vertexData);
+
+  const transformInfoBuffer = device.createBuffer({
+    label: 'transform info buffer',
   });
 
   const render = () => {
