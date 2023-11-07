@@ -32,6 +32,9 @@ devDependencies:
   vue:
     specifier: ^3.2.47
     version: 3.2.47
+  webgpu-debugger:
+    specifier: link:common\webgpu-debugger
+    version: link:common/webgpu-debugger
 
 packages:
 
