@@ -23,16 +23,95 @@ export function createRender(context: GPUCanvasContext, device: GPUDevice) {
     },
   });
 
+  data.update(context.canvas.width, context.canvas.height);
+
   const vertexData = new Float32Array(data.positions);
   const vertexBuffer = device.createBuffer({
     label: 'vertex buffer',
     size: vertexData.byteLength,
     usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
   });
-  device.queue.writeBuffer(vertexBuffer, 0, vertexData);
 
-  const transformInfoBuffer = device.createBuffer({
-    label: 'transform info buffer',
+  const scalingData = new Float32Array(data.scalings);
+  const scalingBuffer = device.createBuffer({
+    label: 'scaling buffer',
+    size: scalingData.byteLength,
+    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+  });
+
+  const offsetData = new Float32Array(data.offsets);
+  const offsetBuffer = device.createBuffer({
+    label: 'offset buffer',
+    size: offsetData.byteLength,
+    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+  });
+
+  const colorData = new Float32Array(data.colors);
+  const colorBuffer = device.createBuffer({
+    label: 'color buffer',
+    size: colorData.byteLength,
+    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+  });
+
+  const resolutionData = new Float32Array([
+    context.canvas.width,
+    context.canvas.height,
+  ]);
+  const resolutionBuffer = device.createBuffer({
+    label: 'resolution buffer',
+    size: resolutionData.byteLength,
+    usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+  });
+
+  const resize = () => {
+    data.update(context.canvas.width, context.canvas.height);
+    vertexData.set(data.positions);
+    device.queue.writeBuffer(vertexBuffer, 0, vertexData);
+    scalingData.set(data.scalings);
+    device.queue.writeBuffer(scalingBuffer, 0, scalingData);
+    offsetData.set(data.offsets);
+    device.queue.writeBuffer(offsetBuffer, 0, offsetData);
+    colorData.set(data.colors);
+    device.queue.writeBuffer(colorBuffer, 0, colorData);
+    resolutionData.set([context.canvas.width, context.canvas.height]);
+    device.queue.writeBuffer(resolutionBuffer, 0, resolutionData);
+  };
+
+  const bindGroup = device.createBindGroup({
+    label: 'bind group',
+    layout: pipeline.getBindGroupLayout(0),
+    entries: [
+      {
+        binding: 0,
+        resource: {
+          buffer: vertexBuffer,
+        },
+      },
+      {
+        binding: 1,
+        resource: {
+          buffer: scalingBuffer,
+        },
+      },
+      {
+        binding: 2,
+        resource: {
+          buffer: offsetBuffer,
+        },
+      },
+      {
+        binding: 3,
+        resource: {
+          buffer: colorBuffer,
+        },
+      },
+      {
+        binding: 4,
+        resource: {
+          buffer: resolutionBuffer,
+        },
+      },
+    ],
   });
 
   const render = () => {
@@ -52,12 +131,15 @@ export function createRender(context: GPUCanvasContext, device: GPUDevice) {
     });
 
     pass.setPipeline(pipeline);
-    pass.draw(3);
+    pass.setBindGroup(0, bindGroup);
+    pass.draw(data.positions.length / data.positionSize, data.count);
     pass.end();
 
     const commandBuffer = encoder.finish();
     device.queue.submit([commandBuffer]);
   };
+
+  render.resize = resize;
 
   return render;
 }

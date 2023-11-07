@@ -2,37 +2,30 @@ struct Vertex {
   position: vec2f,
 };
 
-struct TransformInfo {
-  scale: f32,
-  offset: vec2f,
-};
-
-struct RenderInfo {
-  color: vec4f,
-};
-
 struct Varing {
   @builtin(position) position: vec4f,
   @location(0) color: vec4f,
 };
 
 @group(0) @binding(0) var<storage, read> vertices: array<Vertex>;
-@group(0) @binding(1) var<storage, read> transformInfos: array<TransformInfo>;
-@group(0) @binding(2) var<storage, read> renderInfos: array<RenderInfo>;
+@group(0) @binding(1) var<storage, read> scalings: array<f32>;
+@group(0) @binding(2) var<storage, read> offsets: array<vec2f>;
+@group(0) @binding(3) var<storage, read> colors: array<vec4f>;
+@group(0) @binding(4) var<uniform> resolution: vec2f;
 
 @vertex fn vs(
   @builtin(vertex_index) vertexIndex: u32,
   @builtin(instance_index) instanceIndex: u32,
 ) -> Varing {
   let vertex = vertices[vertexIndex];
-  let transformInfo = transformInfos[instanceIndex];
-  let scale = transformInfo.scale;
-  let offset = transformInfo.offset;
-  let renderInfo = renderInfos[instanceIndex];
-  let color = renderInfo.color;
+  let scaling = scalings[instanceIndex];
+  let offset = offsets[instanceIndex];
+  let positionTransformed = vertex.position * scaling + offset;
+  let positionClipspace = positionTransformed / resolution * 2.0 - 1.0;
+  let color = colors[instanceIndex * 3 + vertexIndex];
   var varing: Varing;
-  varing.position = vec4f(vertex.position * scale + offset, 0.0, 1.0);
-  varing.color = renderInfo.color;
+  varing.position = vec4f(positionClipspace.x, -positionClipspace.y, 0.0, 1.0);
+  varing.color = color / 255.0;
   return varing;
 }
 

@@ -6,4 +6,4 @@ const context = canvas.getContext('webgpu')!;
 const device = await requestDevice();
 const render = createRender(context, device);
 
-observeResize({ context, device, callbacks: [render] });
+observeResize({ context, device, callbacks: [render.resize, render] });

@@ -22,7 +22,7 @@ export function createRender(gl: WebGL2RenderingContext) {
 
   const resolutionLocation = gl.getUniformLocation(program, 'u_resolution');
 
-  const updateData = () => {
+  const resize = () => {
     data.update(gl.canvas.width, gl.canvas.height);
   };
 
@@ -68,7 +68,7 @@ export function createRender(gl: WebGL2RenderingContext) {
     gl.bindBuffer(gl.ARRAY_BUFFER, scaleBuffer);
     gl.bufferData(
       gl.ARRAY_BUFFER,
-      new Float32Array(data.scales),
+      new Float32Array(data.scalings),
       gl.STATIC_DRAW,
     );
     gl.vertexAttribPointer(
@@ -101,7 +101,7 @@ export function createRender(gl: WebGL2RenderingContext) {
     gl.drawArrays(gl.TRIANGLES, 0, data.positions.length / data.positionSize);
   };
 
-  render.updateData = updateData;
+  render.resize = resize;
 
   return render;
 }
