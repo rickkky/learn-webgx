@@ -1,7 +1,11 @@
 import { mat3 } from 'glas';
 import { createProgram, degreeToRadian } from '/common/helper';
-import { projection } from '/common/transform/webgl/projection-2d';
-import { translation, rotation, scaling } from '/common/transform/transform-2d';
+import {
+  translation,
+  rotation,
+  scaling,
+  projection,
+} from '/common/transform/transform-2d';
 import vertexShader from './vertex.glsl';
 import fragmentShader from './fragment.glsl';
 import { statehub } from './state';

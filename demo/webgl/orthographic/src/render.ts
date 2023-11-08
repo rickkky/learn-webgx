@@ -1,7 +1,11 @@
 import { mat4 } from 'glas';
 import { createProgram, degreeToRadian } from '/common/helper';
-import { orthographic } from '/common/transform/webgl/orthographic';
-import { translation, rotation, scaling } from '/common/transform/transform-3d';
+import {
+  translation,
+  rotation,
+  scaling,
+  orthographic,
+} from '/common/transform/transform-3d';
 import fragmentShader from './fragment.glsl';
 import vertexShader from './vertex.glsl';
 import { statehub } from './state';
@@ -58,7 +62,14 @@ export function createRender(gl: WebGL2RenderingContext) {
     );
 
     const matrix = mat4.multiplication(
-      orthographic(0, gl.canvas.width, 0, gl.canvas.height, -400, 400),
+      orthographic({
+        xMin: 0,
+        xMax: gl.canvas.width,
+        yMin: 0,
+        yMax: gl.canvas.height,
+        zMin: -400,
+        zMax: 400,
+      }),
       translation(state.tx, state.ty, state.tz),
       translation(state.ox, state.oy, state.oz),
       rotation(
