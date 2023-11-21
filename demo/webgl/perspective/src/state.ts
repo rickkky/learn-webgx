@@ -89,7 +89,7 @@ export const statehub = createStatehub<State>({
         min: -360,
         max: 360,
       },
-      default: -45,
+      default: 45,
     },
     {
       key: 'ry',
@@ -99,7 +99,7 @@ export const statehub = createStatehub<State>({
         min: -360,
         max: 360,
       },
-      default: 45,
+      default: -45,
     },
     {
       key: 'rz',

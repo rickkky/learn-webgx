@@ -1,11 +1,6 @@
-import { mat4 } from 'glas';
+import { mat4, vec3 } from 'glas';
 import { createProgram, degreeToRadian } from '/common/helper';
-import {
-  translation,
-  rotation,
-  scaling,
-  orthographic,
-} from '/common/transform/transform-3d';
+import { perspective, lookAt } from '/common/transform/transform-3d';
 import fragmentShader from './fragment.glsl';
 import vertexShader from './vertex.glsl';
 import { statehub } from './state';
@@ -25,7 +20,6 @@ export function createRender(gl: WebGL2RenderingContext) {
   const colorLocation = gl.getAttribLocation(program, 'a_color');
   const colorBuffer = gl.createBuffer();
   const colors = data.colors;
-  const colorSize = data.colorSize;
 
   const matrixLocation = gl.getUniformLocation(program, 'u_matrix');
 
@@ -52,33 +46,16 @@ export function createRender(gl: WebGL2RenderingContext) {
     gl.enableVertexAttribArray(colorLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(colors), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(
-      colorLocation,
-      colorSize,
-      gl.UNSIGNED_BYTE,
-      true,
-      0,
-      0,
-    );
+    gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
 
     const matrix = mat4.multiplication(
-      orthographic({
-        xMin: -gl.canvas.width / 2,
-        xMax: gl.canvas.width / 2,
-        yMin: -gl.canvas.height / 2,
-        yMax: gl.canvas.height / 2,
-        zMin: -400,
-        zMax: 400,
-      }),
-      translation(state.tx, state.ty, state.tz),
-      translation(state.ox, state.oy, state.oz),
-      rotation(
-        degreeToRadian(state.rx),
-        degreeToRadian(state.ry),
-        degreeToRadian(state.rz),
+      perspective(
+        degreeToRadian(state.fov),
+        gl.canvas.width / gl.canvas.height,
+        1,
+        2000,
       ),
-      scaling(state.sx, state.sy, state.sz),
-      translation(-state.ox, -state.oy, -state.oz),
+      lookAt(vec3(state.cx, state.cy, state.cz), vec3(0, 0, 0), vec3(0, 1, 0)),
     );
     gl.uniformMatrix4fv(matrixLocation, false, matrix.toArray());
 

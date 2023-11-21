@@ -88,7 +88,7 @@ export const statehub = createStatehub<State>({
         min: -360,
         max: 360,
       },
-      default: -45,
+      default: 45,
     },
     {
       key: 'ry',
@@ -98,7 +98,7 @@ export const statehub = createStatehub<State>({
         min: -360,
         max: 360,
       },
-      default: 45,
+      default: -45,
     },
     {
       key: 'rz',
@@ -115,27 +115,27 @@ export const statehub = createStatehub<State>({
       label: 'Translate X',
       type: 'slider',
       props: {
-        min: 0,
+        min: -400,
         max: 400,
       },
-      default: 200,
+      default: 0,
     },
     {
       key: 'ty',
       label: 'Translate Y',
       type: 'slider',
       props: {
-        min: 0,
+        min: -400,
         max: 400,
       },
-      default: 200,
+      default: 0,
     },
     {
       key: 'tz',
       label: 'Translate Z',
       type: 'slider',
       props: {
-        min: 0,
+        min: -400,
         max: 400,
       },
       default: 0,

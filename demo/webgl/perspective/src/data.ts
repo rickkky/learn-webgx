@@ -2,9 +2,9 @@ import { createCuboid, createCuboidColors } from '/common/data';
 
 export default {
   positions: [
-    ...createCuboid(40, 100, 0, 35, 0, 35),
-    ...createCuboid(0, 35, 40, 150, 0, 35),
-    ...createCuboid(0, 35, 0, 35, 40, 200),
+    ...createCuboid(50, 150, 0, 40, 0, 40),
+    ...createCuboid(0, 40, 50, 200, 0, 40),
+    ...createCuboid(0, 40, 0, 40, 50, 250),
   ],
   positionSize: createCuboid.positionSize,
   colors: [
