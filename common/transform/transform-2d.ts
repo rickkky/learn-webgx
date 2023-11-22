@@ -1,4 +1,4 @@
-import { mat3 } from 'glas';
+import { mat3 } from 'vectrix';
 
 export function translation(tx: number, ty: number) {
   // prettier-ignore

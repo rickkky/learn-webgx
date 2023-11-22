@@ -1,16 +1,15 @@
-import { mat3 } from 'glas';
-import { createProgram, degreeToRadian } from '/common/helper';
+import { mat3 } from 'vectrix';
 import {
   translation,
   rotation,
   scaling,
   projection,
 } from '/common/transform/transform-2d';
+import { createProgram, degreeToRadian } from '/common/helper';
 import vertexShader from './vertex.glsl';
 import fragmentShader from './fragment.glsl';
-import { statehub } from './state';
-import type { State } from './state';
 import * as data from './data';
+import { statehub, State } from './state';
 
 export function createRender(gl: WebGL2RenderingContext) {
   const program = createProgram(gl, vertexShader, fragmentShader);
@@ -44,14 +43,14 @@ export function createRender(gl: WebGL2RenderingContext) {
       0,
     );
 
-    const matrix = mat3.multiplication(
+    const matrix = mat3.multiplication([
       projection(gl.canvas.width, gl.canvas.height),
       translation(state.tx, state.ty),
       translation(state.ox, state.oy),
       rotation(degreeToRadian(state.angle)),
       scaling(state.sx, state.sy),
       translation(-state.ox, -state.oy),
-    );
+    ]);
     gl.uniformMatrix3fv(matrixLocation, false, matrix.toArray());
 
     gl.drawArrays(gl.TRIANGLES, 0, positions.length / positionSize);

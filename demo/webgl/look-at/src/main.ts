@@ -1,6 +1,6 @@
 import { observeResize } from '/common/helper';
-import { statehub } from './state';
 import { createRender } from './render';
+import { statehub } from './state';
 
 const canvas = document.querySelector('#canvas') as HTMLCanvasElement;
 const gl = canvas.getContext('webgl2')!;

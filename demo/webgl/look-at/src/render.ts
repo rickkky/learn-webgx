@@ -1,11 +1,10 @@
-import { mat4, vec3 } from 'glas';
-import { createProgram, degreeToRadian } from '/common/helper';
+import { mat4, vec3 } from 'vectrix';
 import { perspective, lookAt } from '/common/transform/transform-3d';
+import { createProgram, degreeToRadian } from '/common/helper';
 import fragmentShader from './fragment.glsl';
 import vertexShader from './vertex.glsl';
-import { statehub } from './state';
-import type { State } from './state';
 import data from './data';
+import { statehub, State } from './state';
 
 export function createRender(gl: WebGL2RenderingContext) {
   const program = createProgram(gl, vertexShader, fragmentShader);
@@ -48,7 +47,7 @@ export function createRender(gl: WebGL2RenderingContext) {
     gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(colors), gl.STATIC_DRAW);
     gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
 
-    const matrix = mat4.multiplication(
+    const matrix = mat4.multiplication([
       perspective(
         degreeToRadian(state.fov),
         gl.canvas.width / gl.canvas.height,
@@ -56,7 +55,7 @@ export function createRender(gl: WebGL2RenderingContext) {
         2000,
       ),
       lookAt(vec3(state.cx, state.cy, state.cz), vec3(0, 0, 0), vec3(0, 1, 0)),
-    );
+    ]);
     gl.uniformMatrix4fv(matrixLocation, false, matrix.toArray());
 
     if (state.enableCullFace) {

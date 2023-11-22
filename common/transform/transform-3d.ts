@@ -1,4 +1,4 @@
-import { mat4, vec3, Vector3 } from 'glas';
+import { mat4, vec3, Vector3 } from 'vectrix';
 
 /**
  * Model coordinate system is right-handed, with

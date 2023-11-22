@@ -1,16 +1,15 @@
-import { mat4 } from 'glas';
-import { createProgram, degreeToRadian } from '/common/helper';
+import { mat4 } from 'vectrix';
 import {
   translation,
   rotation,
   scaling,
   orthographic,
 } from '/common/transform/transform-3d';
+import { createProgram, degreeToRadian } from '/common/helper';
 import fragmentShader from './fragment.glsl';
 import vertexShader from './vertex.glsl';
-import { statehub } from './state';
-import type { State } from './state';
 import data from './data';
+import { statehub, State } from './state';
 
 export function createRender(gl: WebGL2RenderingContext) {
   const program = createProgram(gl, vertexShader, fragmentShader);
@@ -61,7 +60,7 @@ export function createRender(gl: WebGL2RenderingContext) {
       0,
     );
 
-    const matrix = mat4.multiplication(
+    const matrix = mat4.multiplication([
       orthographic({
         xMin: -gl.canvas.width / 2,
         xMax: gl.canvas.width / 2,
@@ -79,7 +78,7 @@ export function createRender(gl: WebGL2RenderingContext) {
       ),
       scaling(state.sx, state.sy, state.sz),
       translation(-state.ox, -state.oy, -state.oz),
-    );
+    ]);
     gl.uniformMatrix4fv(matrixLocation, false, matrix.toArray());
 
     if (state.enableCullFace) {

@@ -1,8 +1,7 @@
 import { loadImage, observeResize, createProgram } from '/common/helper';
 import vertexShader from './vertex.glsl';
 import fragmentShader from './fragment.glsl';
-import { kernels, statehub } from './state';
-import type { State } from './state';
+import { kernels, statehub, State } from './state';
 import imageSource from '/asset/leaves.jpg';
 
 const image = await loadImage(imageSource);

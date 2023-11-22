@@ -1,5 +1,5 @@
 struct Vertex {
-  position: vec2f,
+  @location(0) position: vec2f,
 };
 
 struct Varing {
@@ -7,17 +7,16 @@ struct Varing {
   @location(0) color: vec4f,
 };
 
-@group(0) @binding(0) var<storage, read> vertices: array<Vertex>;
-@group(0) @binding(1) var<storage, read> scalings: array<f32>;
-@group(0) @binding(2) var<storage, read> offsets: array<vec2f>;
-@group(0) @binding(3) var<storage, read> colors: array<vec4f>;
-@group(0) @binding(4) var<uniform> resolution: vec2f;
+@group(0) @binding(0) var<storage, read> scalings: array<f32>;
+@group(0) @binding(1) var<storage, read> offsets: array<vec2f>;
+@group(0) @binding(2) var<storage, read> colors: array<vec4f>;
+@group(0) @binding(3) var<uniform> resolution: vec2f;
 
 @vertex fn vs(
+  vertex: Vertex,
   @builtin(vertex_index) vertexIndex: u32,
   @builtin(instance_index) instanceIndex: u32,
 ) -> Varing {
-  let vertex = vertices[vertexIndex];
   let scaling = scalings[instanceIndex];
   let offset = offsets[instanceIndex];
   let positionTransformed = vertex.position * scaling + offset;
