@@ -1,10 +1,4 @@
-import { mat3 } from 'vectrix';
-import {
-  translation,
-  rotation,
-  scaling,
-  projection,
-} from '/common/transform/transform-2d';
+import { mat3 } from '/common/vectrix';
 import { createProgram, degreeToRadian } from '/common/helper';
 import vertexShader from './vertex.glsl';
 import fragmentShader from './fragment.glsl';
@@ -44,12 +38,12 @@ export function createRender(gl: WebGL2RenderingContext) {
     );
 
     const matrix = mat3.multiplication([
-      projection(gl.canvas.width, gl.canvas.height),
-      translation(state.tx, state.ty),
-      translation(state.ox, state.oy),
-      rotation(degreeToRadian(state.angle)),
-      scaling(state.sx, state.sy),
-      translation(-state.ox, -state.oy),
+      mat3.projection(gl.canvas.width, gl.canvas.height),
+      mat3.translation(state.tx, state.ty),
+      mat3.translation(state.ox, state.oy),
+      mat3.rotation(degreeToRadian(state.angle)),
+      mat3.scaling(state.sx, state.sy),
+      mat3.translation(-state.ox, -state.oy),
     ]);
     gl.uniformMatrix3fv(matrixLocation, false, matrix.toArray());
 

@@ -24,10 +24,10 @@ struct Varing {
   let color = colors[instanceIndex * 3 + vertexIndex];
   var varing: Varing;
   varing.position = vec4f(positionClipspace.x, -positionClipspace.y, 0.0, 1.0);
-  varing.color = color / 255.0;
+  varing.color = color;
   return varing;
 }
 
 @fragment fn fs(@location(0) color: vec4f) -> @location(0) vec4f {
-  return color;
+  return color / 255.0;
 }

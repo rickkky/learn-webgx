@@ -1,11 +1,5 @@
-import { mat3 } from 'vectrix';
+import { mat3 } from '/common/vectrix';
 import { degreeToRadian } from '/common/helper';
-import {
-  translation,
-  rotation,
-  scaling,
-  projection,
-} from '/common/transform/transform-2d';
 import shader from './shader.wgsl';
 import { statehub, State } from './state';
 import * as data from './data';
@@ -92,12 +86,12 @@ export function createRender(context: GPUCanvasContext, device: GPUDevice) {
     pass.setVertexBuffer(0, vertexBuffer);
 
     const matrix = mat3.multiplication([
-      projection(context.canvas.width, context.canvas.height),
-      translation(state.tx, state.ty),
-      translation(state.ox, state.oy),
-      rotation(degreeToRadian(state.angle)),
-      scaling(state.sx, state.sy),
-      translation(-state.ox, -state.oy),
+      mat3.projection(context.canvas.width, context.canvas.height),
+      mat3.translation(state.tx, state.ty),
+      mat3.translation(state.ox, state.oy),
+      mat3.rotation(degreeToRadian(state.angle)),
+      mat3.scaling(state.sx, state.sy),
+      mat3.translation(-state.ox, -state.oy),
     ]);
     const matrixValue = matrix.toArray2D();
     matrixData.set(matrixValue[0]);

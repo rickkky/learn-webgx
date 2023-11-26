@@ -77,11 +77,11 @@ export function rotationZ(angle: number) {
 }
 
 export function rotation(angleX: number, angleY: number, angleZ: number) {
-  return mat4.multiplication(
+  return mat4.multiplication([
     rotationZ(angleZ),
     rotationY(angleY),
     rotationX(angleX),
-  );
+  ]);
 }
 
 export function scaling(sx: number, sy: number, sz: number) {
