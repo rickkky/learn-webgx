@@ -27,7 +27,7 @@ export const statehub = createStatehub<State>({
       label: 'Camera Y',
       type: 'slider',
       props: {
-        min: 0,
+        min: -500,
         max: 500,
       },
       default: 300,
