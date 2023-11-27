@@ -27,7 +27,7 @@ export const statehub = createStatehub<State>({
       type: 'slider',
       props: {
         min: 0,
-        max: 100,
+        max: 150,
       },
       default: 0,
     },
@@ -36,8 +36,8 @@ export const statehub = createStatehub<State>({
       label: 'Origin Y',
       type: 'slider',
       props: {
-        min: -20,
-        max: 0,
+        min: 0,
+        max: 200,
       },
       default: 0,
     },
@@ -47,7 +47,7 @@ export const statehub = createStatehub<State>({
       type: 'slider',
       props: {
         min: 0,
-        max: 100,
+        max: 250,
       },
       default: 0,
     },
