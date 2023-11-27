@@ -1,4 +1,4 @@
-import { mat4, CLIPSPACE } from '/common/vectrix';
+import { mat4, CLIP } from 'vectrix';
 import { degreeToRadian } from '/common/helper';
 import shader from './shader.wgsl';
 import { statehub, State } from './state';
@@ -141,7 +141,7 @@ export function createRender(context: GPUCanvasContext, device: GPUDevice) {
           zMin: -400,
           zMax: 400,
         },
-        CLIPSPACE.WEBGPU,
+        CLIP.WEBGPU,
       ),
       mat4.translation(state.tx, state.ty, state.tz),
       mat4.translation(state.ox, state.oy, state.oz),

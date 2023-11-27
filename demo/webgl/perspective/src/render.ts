@@ -1,4 +1,4 @@
-import { mat4 } from '/common/vectrix';
+import { mat4 } from 'vectrix';
 import { createProgram, degreeToRadian } from '/common/helper';
 import fragmentShader from './fragment.glsl';
 import vertexShader from './vertex.glsl';

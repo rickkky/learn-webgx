@@ -29,14 +29,14 @@ export function degreeToRadian(degree: number) {
   return (degree * Math.PI) / 180;
 }
 
+export function random(min: number, max: number) {
+  return min + Math.random() * (max - min);
+}
+
 export function randomColor() {
   return [Math.random() * 256, Math.random() * 256, Math.random() * 256, 255];
 }
 
 export function repeatColor(count: number, color = randomColor()) {
   return Array(count).fill(color).flat();
-}
-
-export function random(min: number, max: number) {
-  return min + Math.random() * (max - min);
 }

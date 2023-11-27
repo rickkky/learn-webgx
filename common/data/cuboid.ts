@@ -1,13 +1,13 @@
 import { repeatColor } from '/common/helper';
 
-export const createCuboid = (
+export function createCuboid(
   left: number,
   right: number,
   bottom: number,
   top: number,
   back: number,
   front: number,
-) => {
+) {
   // prettier-ignore
   const positions = [
     // front
@@ -65,26 +65,27 @@ export const createCuboid = (
     right, top,    back,
   ];
   return positions;
-};
+}
 
 createCuboid.positionSize = 3;
 
-export const createCuboidColors = (countPerInstance: number) => {
+export function createCuboidColors(color?: number[]) {
+  const countPerTriangle = 3;
   const colors = [
     // front
-    ...repeatColor(2 * countPerInstance),
+    ...repeatColor(2 * countPerTriangle, color),
     // back
-    ...repeatColor(2 * countPerInstance),
+    ...repeatColor(2 * countPerTriangle, color),
     // top
-    ...repeatColor(2 * countPerInstance),
+    ...repeatColor(2 * countPerTriangle, color),
     // bottom
-    ...repeatColor(2 * countPerInstance),
+    ...repeatColor(2 * countPerTriangle, color),
     // left
-    ...repeatColor(2 * countPerInstance),
+    ...repeatColor(2 * countPerTriangle, color),
     // right
-    ...repeatColor(2 * countPerInstance),
+    ...repeatColor(2 * countPerTriangle, color),
   ];
   return colors;
-};
+}
 
 createCuboidColors.colorSize = 4;

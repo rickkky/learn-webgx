@@ -1,4 +1,4 @@
-import { mat3 } from '/common/vectrix';
+import { mat3 } from 'vectrix';
 import { createProgram, degreeToRadian } from '/common/helper';
 import vertexShader from './vertex.glsl';
 import fragmentShader from './fragment.glsl';
@@ -38,7 +38,7 @@ export function createRender(gl: WebGL2RenderingContext) {
     );
 
     const matrix = mat3.multiplication([
-      mat3.projection(gl.canvas.width, gl.canvas.height),
+      projection(gl.canvas.width, gl.canvas.height),
       mat3.translation(state.tx, state.ty),
       mat3.translation(state.ox, state.oy),
       mat3.rotation(degreeToRadian(state.angle)),
@@ -51,4 +51,19 @@ export function createRender(gl: WebGL2RenderingContext) {
   };
 
   return render;
+}
+
+function projection(width: number, height: number) {
+  const sx = 2 / width;
+  // flip y
+  const sy = -2 / height;
+  const tx = -1;
+  const ty = 1;
+  // prettier-ignore
+  const nums = [
+    sx, 0,  0,
+    0,  sy, 0,
+    tx, ty, 1,
+  ]
+  return mat3(nums);
 }

@@ -1,16 +1,20 @@
 import { createCuboid, createCuboidColors } from '/common/data';
 
+const positions = [
+  ...createCuboid(50, 150, 0, 40, 0, 40),
+  ...createCuboid(0, 40, 50, 200, 0, 40),
+  ...createCuboid(0, 40, 0, 40, 50, 250),
+];
+
+const colors = [
+  ...createCuboidColors(),
+  ...createCuboidColors(),
+  ...createCuboidColors(),
+];
+
 export default {
-  positions: [
-    ...createCuboid(50, 150, 0, 40, 0, 40),
-    ...createCuboid(0, 40, 50, 200, 0, 40),
-    ...createCuboid(0, 40, 0, 40, 50, 250),
-  ],
+  positions,
   positionSize: createCuboid.positionSize,
-  colors: [
-    ...createCuboidColors(3),
-    ...createCuboidColors(3),
-    ...createCuboidColors(3),
-  ],
+  colors,
   colorSize: createCuboidColors.colorSize,
 };

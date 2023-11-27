@@ -1,4 +1,4 @@
-import { mat4, vec3, CLIPSPACE } from '/common/vectrix';
+import { mat4, vec3, CLIP } from 'vectrix';
 import { degreeToRadian } from '/common/helper';
 import shader from './shader.wgsl';
 import { statehub, State } from './state';
@@ -137,7 +137,7 @@ export function createRender(context: GPUCanvasContext, device: GPUDevice) {
         context.canvas.width / context.canvas.height,
         1,
         2000,
-        CLIPSPACE.WEBGPU,
+        CLIP.WEBGPU,
       ),
       mat4.lookAt(
         vec3(state.cx, state.cy, state.cz),

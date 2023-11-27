@@ -1,4 +1,4 @@
-import { mat3 } from '/common/vectrix';
+import { mat3 } from 'vectrix';
 import { degreeToRadian } from '/common/helper';
 import shader from './shader.wgsl';
 import { statehub, State } from './state';
@@ -86,7 +86,7 @@ export function createRender(context: GPUCanvasContext, device: GPUDevice) {
     pass.setVertexBuffer(0, vertexBuffer);
 
     const matrix = mat3.multiplication([
-      mat3.projection(context.canvas.width, context.canvas.height),
+      projection(context.canvas.width, context.canvas.height),
       mat3.translation(state.tx, state.ty),
       mat3.translation(state.ox, state.oy),
       mat3.rotation(degreeToRadian(state.angle)),
@@ -108,4 +108,19 @@ export function createRender(context: GPUCanvasContext, device: GPUDevice) {
   };
 
   return render;
+}
+
+function projection(width: number, height: number) {
+  const sx = 2 / width;
+  // flip y
+  const sy = -2 / height;
+  const tx = -1;
+  const ty = 1;
+  // prettier-ignore
+  const nums = [
+    sx, 0,  0,
+    0,  sy, 0,
+    tx, ty, 1,
+  ]
+  return mat3(nums);
 }
