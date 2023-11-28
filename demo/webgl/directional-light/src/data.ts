@@ -7,9 +7,9 @@ const positions = [
 ];
 
 const colors = [
-  ...createCuboidColors(),
-  ...createCuboidColors(),
-  ...createCuboidColors(),
+  ...createCuboidColors([250, 100, 100, 255]),
+  ...createCuboidColors([100, 250, 100, 255]),
+  ...createCuboidColors([100, 100, 250, 255]),
 ];
 
 const normals = createNormals(positions);
