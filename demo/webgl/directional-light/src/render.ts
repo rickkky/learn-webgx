@@ -37,50 +37,68 @@ export function createRender(gl: WebGL2RenderingContext) {
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
   gl.vertexAttribPointer(normalLocation, 3, gl.FLOAT, false, 0, 0);
 
-  const matrixLocation = gl.getUniformLocation(program, 'u_matrix');
-
-  const directionalLightDirectionLocation = gl.getUniformLocation(
+  const worldViewProjectionMatrixLocation = gl.getUniformLocation(
     program,
-    'u_directionalLightDirection',
+    'u_worldViewProjectionMatrix',
+  );
+  const worldInverseTransposeMatrixLocation = gl.getUniformLocation(
+    program,
+    'u_worldInverseTransposeMatrix',
+  );
+
+  const directionalLightReverseDirectionLocation = gl.getUniformLocation(
+    program,
+    'u_directionalLightReverseDirection',
   );
   gl.uniform3fv(
-    directionalLightDirectionLocation,
-    vec3(0.3, 0.6, 0.9).normalize().toArray(),
+    directionalLightReverseDirectionLocation,
+    vec3(1, -0.5, 2).normalize().toArray(),
   );
 
   const render = (state: State = statehub.state) => {
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    const matrix = mat4.multiplication([
-      mat4.perspective(
-        degreeToRadian(state.fov),
-        gl.canvas.width / gl.canvas.height,
-        1,
-        2000,
-      ),
-      mat4.translation(state.tx, state.ty, state.tz),
-      mat4.translation(state.ox, state.oy, state.oz),
+    const cameraMatrix = mat4.targetTo(
+      vec3(0, 0, 600),
+      vec3(0, 0, 0),
+      vec3(0, 1, 0),
+    );
+    const viewMatrix = mat4.invert(cameraMatrix);
+    const projectionMatrix = mat4.perspective(
+      degreeToRadian(60),
+      gl.canvas.width / gl.canvas.height,
+      1,
+      2000,
+    );
+    const viewProjectionMatrix = mat4.multiply(projectionMatrix, viewMatrix);
+    const worldMatrix = mat4.multiplication([
       mat4.rotation(
         degreeToRadian(state.rx),
         degreeToRadian(state.ry),
         degreeToRadian(state.rz),
       ),
-      mat4.scaling(state.sx, state.sy, state.sz),
-      mat4.translation(-state.ox, -state.oy, -state.oz),
     ]);
-    gl.uniformMatrix4fv(matrixLocation, false, matrix.toArray());
+    const worldViewProjectionMatrix = mat4.multiply(
+      viewProjectionMatrix,
+      worldMatrix,
+    );
+    const worldInverseTransposeMatrix = mat4.transpose(
+      mat4.invert(worldMatrix),
+    );
+    gl.uniformMatrix4fv(
+      worldViewProjectionMatrixLocation,
+      false,
+      worldViewProjectionMatrix.toArray(),
+    );
+    gl.uniformMatrix4fv(
+      worldInverseTransposeMatrixLocation,
+      false,
+      worldInverseTransposeMatrix.toArray(),
+    );
 
-    if (state.enableCullFace) {
-      gl.enable(gl.CULL_FACE);
-    } else {
-      gl.disable(gl.CULL_FACE);
-    }
-    if (state.enableDepthTest) {
-      gl.enable(gl.DEPTH_TEST);
-    } else {
-      gl.disable(gl.DEPTH_TEST);
-    }
+    gl.enable(gl.CULL_FACE);
+    gl.enable(gl.DEPTH_TEST);
 
     gl.drawArrays(gl.TRIANGLES, 0, positions.length / positionSize);
   };
