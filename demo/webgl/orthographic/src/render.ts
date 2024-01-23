@@ -56,12 +56,12 @@ export function createRender(gl: WebGL2RenderingContext) {
 
     const matrix = mat4.multiplication([
       mat4.orthographic({
-        xMin: -gl.canvas.width / 2,
-        xMax: gl.canvas.width / 2,
-        yMin: -gl.canvas.height / 2,
-        yMax: gl.canvas.height / 2,
-        zMin: -400,
-        zMax: 400,
+        xmin: -gl.canvas.width / 2,
+        xmax: gl.canvas.width / 2,
+        ymin: -gl.canvas.height / 2,
+        ymax: gl.canvas.height / 2,
+        zmin: -400,
+        zmax: 400,
       }),
       mat4.translation(state.tx, state.ty, state.tz),
       mat4.translation(state.ox, state.oy, state.oz),

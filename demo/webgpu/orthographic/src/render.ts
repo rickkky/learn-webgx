@@ -134,12 +134,12 @@ export function createRender(context: GPUCanvasContext, device: GPUDevice) {
     const matrix = mat4.multiplication([
       mat4.orthographic(
         {
-          xMin: -context.canvas.width / 2,
-          xMax: context.canvas.width / 2,
-          yMin: -context.canvas.height / 2,
-          yMax: context.canvas.height / 2,
-          zMin: -400,
-          zMax: 400,
+          xmin: -context.canvas.width / 2,
+          xmax: context.canvas.width / 2,
+          ymin: -context.canvas.height / 2,
+          ymax: context.canvas.height / 2,
+          zmin: -400,
+          zmax: 400,
         },
         CLIP.WEBGPU,
       ),
