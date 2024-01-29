@@ -49,7 +49,7 @@ export const statehub = createStatehub<State>({
       type: 'slider',
       props: {
         min: 1,
-        max: 100,
+        max: 1000,
       },
       default: 50,
     },
@@ -68,8 +68,8 @@ export const statehub = createStatehub<State>({
       label: 'Rotation Vertical',
       type: 'slider',
       props: {
-        min: -180,
-        max: 180,
+        min: 0,
+        max: 360,
       },
       default: 45,
     },
