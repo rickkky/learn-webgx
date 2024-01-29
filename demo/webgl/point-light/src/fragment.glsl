@@ -3,6 +3,8 @@
 precision highp float;
 
 uniform float u_shininess;
+uniform vec3 u_lightColor;
+uniform vec3 u_specularColor;
 
 in vec4 v_color;
 in vec3 v_normal;
@@ -22,6 +24,6 @@ void main() {
     specular = pow(dot(normal, halfVector), u_shininess);
   }
   outColor = v_color;
-  outColor.rgb *= light;
-  outColor.rgb += specular;
+  outColor.rgb *= light * u_lightColor;
+  outColor.rgb += specular * u_specularColor;
 }

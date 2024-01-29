@@ -57,6 +57,13 @@ export function createRender(gl: WebGL2RenderingContext) {
   );
 
   const shininessLocation = gl.getUniformLocation(program, 'u_shininess');
+  const lightColorLocation = gl.getUniformLocation(program, 'u_lightColor');
+  gl.uniform3fv(lightColorLocation, vec3(1, 0.6, 0.6).normalize().toArray());
+  const specularColorLocation = gl.getUniformLocation(
+    program,
+    'u_specularColor',
+  );
+  gl.uniform3fv(specularColorLocation, vec3(1, 0.2, 0.2).normalize().toArray());
 
   const render = (state: State = statehub.state) => {
     gl.clearColor(0, 0, 0, 0);
