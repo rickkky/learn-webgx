@@ -141,11 +141,9 @@ export function createRender(context: GPUCanvasContext, device: GPUDevice) {
       ),
       mat4.translation(state.tx, state.ty, state.tz),
       mat4.translation(state.ox, state.oy, state.oz),
-      mat4.rotation(
-        degreeToRadian(state.rx),
-        degreeToRadian(state.ry),
-        degreeToRadian(state.rz),
-      ),
+      mat4.rotationZ(degreeToRadian(state.rz)),
+      mat4.rotationY(degreeToRadian(state.ry)),
+      mat4.rotationX(degreeToRadian(state.rx)),
       mat4.scaling(state.sx, state.sy, state.sz),
       mat4.translation(-state.ox, -state.oy, -state.oz),
     ]);

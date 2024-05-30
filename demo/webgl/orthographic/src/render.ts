@@ -55,21 +55,19 @@ export function createRender(gl: WebGL2RenderingContext) {
     );
 
     const matrix = mat4.multiplication([
-      mat4.orthographic({
-        xmin: -gl.canvas.width / 2,
-        xmax: gl.canvas.width / 2,
-        ymin: -gl.canvas.height / 2,
-        ymax: gl.canvas.height / 2,
-        zmin: -400,
-        zmax: 400,
-      }),
+      mat4.orthographic(
+        -gl.canvas.width / 2,
+        gl.canvas.width / 2,
+        -gl.canvas.height / 2,
+        gl.canvas.height / 2,
+        -400,
+        400,
+      ),
       mat4.translation(state.tx, state.ty, state.tz),
       mat4.translation(state.ox, state.oy, state.oz),
-      mat4.rotation(
-        degreeToRadian(state.rx),
-        degreeToRadian(state.ry),
-        degreeToRadian(state.rz),
-      ),
+      mat4.rotationZ(degreeToRadian(state.rz)),
+      mat4.rotationY(degreeToRadian(state.ry)),
+      mat4.rotationX(degreeToRadian(state.rx)),
       mat4.scaling(state.sx, state.sy, state.sz),
       mat4.translation(-state.ox, -state.oy, -state.oz),
     ]);

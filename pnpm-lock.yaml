@@ -21,8 +21,8 @@ devDependencies:
     specifier: ^5.0.4
     version: 5.0.4
   vectrix:
-    specifier: ^0.1.1
-    version: 0.1.1
+    specifier: ^0.2.1
+    version: 0.2.1
   vite:
     specifier: ^4.2.1
     version: 4.2.1(@types/node@18.15.11)(sass@1.62.1)
@@ -634,8 +634,8 @@ packages:
     hasBin: true
     dev: true
 
-  /vectrix@0.1.1:
-    resolution: {integrity: sha512-PiDlvHYsGcFZMnLFJV0AEjg06DuwsGdbvJDM087AExeFyh7Ur4WzLSVhd2oA8Zy0EAIdH+TZwYe9cwp9pF5+LA==}
+  /vectrix@0.2.1:
+    resolution: {integrity: sha512-w072MQzUd4AO5XijTLXpVnwbOJEiYdbwDQI/ITNkSeS72rp1ooi+MUReMhOxrsOcqOPXJh2BtRt3i9SSQ/bJtg==}
     dev: true
 
   /vite-plugin-glsl@1.1.2(vite@4.2.1):

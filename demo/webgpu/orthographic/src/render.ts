@@ -133,23 +133,19 @@ export function createRender(context: GPUCanvasContext, device: GPUDevice) {
 
     const matrix = mat4.multiplication([
       mat4.orthographic(
-        {
-          xmin: -context.canvas.width / 2,
-          xmax: context.canvas.width / 2,
-          ymin: -context.canvas.height / 2,
-          ymax: context.canvas.height / 2,
-          zmin: -400,
-          zmax: 400,
-        },
+        -context.canvas.width / 2,
+        context.canvas.width / 2,
+        -context.canvas.height / 2,
+        context.canvas.height / 2,
+        -400,
+        400,
         CLIP.WEBGPU,
       ),
       mat4.translation(state.tx, state.ty, state.tz),
       mat4.translation(state.ox, state.oy, state.oz),
-      mat4.rotation(
-        degreeToRadian(state.rx),
-        degreeToRadian(state.ry),
-        degreeToRadian(state.rz),
-      ),
+      mat4.rotationZ(degreeToRadian(state.rz)),
+      mat4.rotationY(degreeToRadian(state.ry)),
+      mat4.rotationX(degreeToRadian(state.rx)),
       mat4.scaling(state.sx, state.sy, state.sz),
       mat4.translation(-state.ox, -state.oy, -state.oz),
     ]);
