@@ -73,7 +73,7 @@ export function createRender(gl: WebGL2RenderingContext) {
     );
     const viewProjectionMatrix = mat4.multiply(projectionMatrix, viewMatrix);
     const worldMatrix = mat4.multiplication([
-      mat4.rotation(
+      mat4.rotationXYZ(
         degreeToRadian(state.rx),
         degreeToRadian(state.ry),
         degreeToRadian(state.rz),
